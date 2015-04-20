@@ -2,7 +2,5 @@ dotfiles
 ========
 
 -> add to ~/.bashrc;
-. ~/dotfiles/import
 
-
-mydotfiles
+source ~/dotfiles/import
