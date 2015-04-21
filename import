@@ -1,3 +1,5 @@
+
+#Get all Alias Sources
 function src() {
   local file
   if [[ "$1" ]]; then
@@ -10,3 +12,10 @@ function src() {
 }
 
 src
+
+#pimp the prompt
+source ~/dotfiles/.shell_prompt.sh
+
+
+#Load up all modules
+. ~/dotfiles/modules/z/z.sh

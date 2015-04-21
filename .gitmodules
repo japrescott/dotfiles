@@ -1,0 +1,15 @@
+[submodule "modules/z"]
+	path = modules/z
+	url = https://github.com/rupa/z.git
+[submodule "modules/tmux/tpm"]
+	path = modules/tmux/tpm
+	url = https://github.com/tmux-plugins/tpm
+[submodule "modules/tmux/tmux-resurrect"]
+	path = modules/tmux/tmux-resurrect
+	url = https://github.com/tmux-plugins/tmux-resurrect.git
+[submodule "modules/tmux/tmux-yank"]
+	path = modules/tmux/tmux-yank
+	url = https://github.com/tmux-plugins/tmux-yank.git
+[submodule "modules/tmux/tmux-sensible"]
+	path = modules/tmux/tmux-sensible
+	url = https://github.com/tmux-plugins/tmux-sensible.git
