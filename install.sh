@@ -14,7 +14,7 @@ ln -s "$PWD/.inputrc" ~/.inputrc
 ln -s "$PWD/.gitconfig" ~/.gitconfig
 ln -s "$PWD/.tmux.conf" ~/.tmux.conf
 ln -s "$PWD/.tmux_theme" ~/.tmux_theme
-ln -s "$PWD/.tmux" ~/module/tmux
+ln -s "$PWD/module/tmux" ~/.tmux
 
 # Finished.
 echo Dotfiles installation complete.
