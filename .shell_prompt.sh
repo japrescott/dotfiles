@@ -11,13 +11,13 @@ function __promptline_ps1 {
   __promptline_wrapper "$(if [[ -n ${ZSH_VERSION-} ]]; then print %n; elif [[ -n ${FISH_VERSION-} ]]; then printf "%s" "$USER"; else printf "%s" \\u; fi )" "$slice_prefix" "$slice_suffix" && { slice_prefix="$slice_joiner"; is_prompt_empty=0; }
 
   # section "c" header
-  slice_prefix="${c_bg}${sep}${c_fg}${c_bg}${space}" slice_suffix="$space${c_sep_fg}" slice_joiner="${c_fg}${c_bg}${alt_sep}${space}" slice_empty_prefix="${c_fg}${c_bg}${space}"
+  slice_prefix="${c_bg}${c_fg}${c_bg}${space}" slice_suffix="$space${c_sep_fg}" slice_joiner="${c_fg}${c_bg}${alt_sep}${space}" slice_empty_prefix="${c_fg}${c_bg}${space}"
   [ $is_prompt_empty -eq 1 ] && slice_prefix="$slice_empty_prefix"
   # section "c" slices
   __promptline_wrapper "$(__promptline_cwd)" "$slice_prefix" "$slice_suffix" && { slice_prefix="$slice_joiner"; is_prompt_empty=0; }
 
   # section "y" header
-  slice_prefix="${y_bg}${sep}${y_fg}${y_bg}${space}" slice_suffix="$space${y_sep_fg}" slice_joiner="${y_fg}${y_bg}${alt_sep}${space}" slice_empty_prefix="${y_fg}${y_bg}${space}"
+  slice_prefix="${y_bg}${y_fg}${y_bg}${space}" slice_suffix="$space${y_sep_fg}" slice_joiner="${y_fg}${y_bg}" slice_empty_prefix="${y_fg}${y_bg}${space}"
   [ $is_prompt_empty -eq 1 ] && slice_prefix="$slice_empty_prefix"
   # section "y" slices
   __promptline_wrapper "$(__promptline_vcs_branch)" "$slice_prefix" "$slice_suffix" && { slice_prefix="$slice_joiner"; is_prompt_empty=0; }
@@ -46,7 +46,7 @@ function __promptline_cwd {
   local first_char
   local part_count=0
   local formatted_cwd=""
-  local dir_sep="  "
+  local dir_sep="/"
   local tilde="~"
 
   local cwd="${PWD/#$HOME/$tilde}"
@@ -136,11 +136,11 @@ function __promptline_git_status {
   fi
 
   local leading_whitespace=""
-  [[ $ahead_count -gt 0 ]]         && { printf "%s" "$leading_whitespace$ahead_symbol$ahead_count"; leading_whitespace=" "; }
-  [[ $behind_count -gt 0 ]]        && { printf "%s" "$leading_whitespace$behind_symbol$behind_count"; leading_whitespace=" "; }
-  [[ $modified_count -gt 0 ]]      && { printf "%s" "$leading_whitespace$modified_symbol$modified_count"; leading_whitespace=" "; }
-  [[ $unmerged_count -gt 0 ]]      && { printf "%s" "$leading_whitespace$unmerged_symbol$unmerged_count"; leading_whitespace=" "; }
-  [[ $added_count -gt 0 ]]         && { printf "%s" "$leading_whitespace$added_symbol$added_count"; leading_whitespace=" "; }
+  [[ $ahead_count -gt 0 ]]         && { printf "%s" "$leading_whitespace$ahead_symbol $ahead_count"; leading_whitespace=" "; }
+  [[ $behind_count -gt 0 ]]        && { printf "%s" "$leading_whitespace$behind_symbol $behind_count"; leading_whitespace=" "; }
+  [[ $modified_count -gt 0 ]]      && { printf "%s" "$leading_whitespace$modified_symbol $modified_count"; leading_whitespace=" "; }
+  [[ $unmerged_count -gt 0 ]]      && { printf "%s" "$leading_whitespace$unmerged_symbol $unmerged_count"; leading_whitespace=" "; }
+  [[ $added_count -gt 0 ]]         && { printf "%s" "$leading_whitespace$added_symbol $added_count"; leading_whitespace=" "; }
   [[ $has_untracked_files -gt 0 ]] && { printf "%s" "$leading_whitespace$has_untracked_files_symbol"; leading_whitespace=" "; }
   [[ $is_clean -gt 0 ]]            && { printf "%s" "$leading_whitespace$clean_symbol"; leading_whitespace=" "; }
 }
@@ -169,7 +169,7 @@ function __promptline {
   fi
   local wrap="$noprint$esc" end_wrap="$end_esc$end_noprint"
   local space=" "
-  local sep=""
+  local sep="$"
   local rsep=""
   local alt_sep="|"
   local alt_rsep=""
@@ -178,11 +178,11 @@ function __promptline {
   local a_fg="${wrap}38;5;236${end_wrap}"
   local a_bg="${wrap}48;5;107${end_wrap}"
   local a_sep_fg="${wrap}38;5;107${end_wrap}"
-  local c_fg="${wrap}38;5;244${end_wrap}"
-  local c_bg="${wrap}48;5;236${end_wrap}"
+  local c_fg="${wrap}38;5;106${end_wrap}"
+  local c_bg="${wrap}48;5;238${end_wrap}"
   local c_sep_fg="${wrap}38;5;236${end_wrap}"
-  local y_fg="${wrap}38;5;248${end_wrap}"
-  local y_bg="${wrap}48;5;239${end_wrap}"
+  local y_fg="${wrap}38;5;106${end_wrap}"
+  local y_bg="${wrap}48;5;240${end_wrap}"
   local y_sep_fg="${wrap}38;5;239${end_wrap}"
   if [[ -n ${ZSH_VERSION-} ]]; then
     PROMPT="$(__promptline_left_prompt)"
