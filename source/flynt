@@ -1,0 +1,7 @@
+alias st='git status'
+alias bad='git bisect bad'
+alias good='git bisect good'
+alias push='git push origin HEAD'
+alias add='git add -p'
+alias jasoStart='sbt "testui/runMain TestUi"'
+alias karma="node_modules/karma/bin/karma"
