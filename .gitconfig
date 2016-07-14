@@ -24,11 +24,45 @@
 	added = yellow
 	changed = green
 	untracked = cyan
+[push]
+	default = current
 
 
 
 
+[alias]
+	st = status
+	ci = commit
+	co = checkout
+	br = branch
+	d = diff
+	dt = difftool
+    fixup = !sh -c 'git commit -m \"fixup! $(git log -1 --format='\\''%s'\\'' $@)\"' -
+    squash = !sh -c 'git commit -m \"squash! $(git log -1 --format='\\''%s'\\'' $@)\"' -
+    ri = rebase --interactive --autosquash
 
+[color]
+	diff = auto
+	status = auto
+	branch = auto
+	user = ebi
+
+[core]
+	whitespace = trailing-space,space-before-tab,cr-at-eol
+	excludesfile = /Users/ebi/.gitignore
+	ignorecase = false
+
+[credential]
+	helper = osxkeychain
 
 [push]
 	default = current
+
+[branch "master"]
+	mergeoptions = --no-ff
+
+[rerere]
+	enabled = true
+
+[http "https://source.scaling.ch:8443/"]
+	sslCert = Jeremy Prescott
