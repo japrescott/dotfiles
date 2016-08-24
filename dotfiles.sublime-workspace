@@ -31,22 +31,6 @@
 	},
 	"buffers":
 	[
-		{
-			"file": "import",
-			"settings":
-			{
-				"buffer_size": 181,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "source/aliases",
-			"settings":
-			{
-				"buffer_size": 3269,
-				"line_ending": "Unix"
-			}
-		}
 	],
 	"build_system": "Packages/User/rsync.sublime-build",
 	"command_palette":
@@ -80,6 +64,8 @@
 	},
 	"file_history":
 	[
+		"/home/jeremy/Programming/dotfiles/import",
+		"/home/jeremy/Programming/dotfiles/source/aliases",
 		"/home/jeremy/Programming/dotfiles/.aliases",
 		"/home/jeremy/Programming/mysr.ch/backend/lib/AsyncFileLineReader.js",
 		"/home/jeremy/Programming/mysr.ch/cfg.auth.json",
@@ -205,9 +191,7 @@
 		"/home/jeremy/Programming/mysr.ch/mysrch.sublime-project",
 		"/home/jeremy/Programming/mysr.ch/apps/geileshit/platforms/android/assets/www/img/favicon.ico_old",
 		"/home/jeremy/Programming/mysr.ch/backend/lib/KueJobFlusher.js",
-		"/home/jeremy/Programming/mysr.ch/apps/geileshit/platforms/firefoxos/config.xml",
-		"/home/jeremy/Programming/mysr.ch/apps/geileshit/platforms/android/res/xml/config.xml",
-		"/home/jeremy/Programming/mysr.ch/apps/geileshit/www/config.xml"
+		"/home/jeremy/Programming/mysr.ch/apps/geileshit/platforms/firefoxos/config.xml"
 	],
 	"find":
 	{
@@ -386,67 +370,8 @@
 	"groups":
 	[
 		{
-			"selected": 1,
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"file": "import",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 181,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								181,
-								181
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Text/Plain text.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "source/aliases",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3269,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								719,
-								719
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Text/Plain text.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				}
 			]
 		}
 	],
