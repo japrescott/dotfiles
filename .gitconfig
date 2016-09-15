@@ -1,8 +1,6 @@
 [user]
-	email = jap@prescore.ch
+	email = jpr@scaling.ch
 	name = Jeremy A. Prescott
-
-
 
 
 [color]
@@ -66,3 +64,5 @@
 
 [http "https://source.scaling.ch:8443/"]
 	sslCert = Jeremy Prescott
+[status]
+	submoduleSummary = true
