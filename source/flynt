@@ -1,9 +1,12 @@
+
 alias st='git status'
 alias bad='git bisect bad'
 alias good='git bisect good'
 alias push='git push origin HEAD'
 alias add='git add -p'
-alias jasoStart='sbt "testuiWithServices/runMain TestUi"'
+alias jasoStart='sbt "test-app-with-services/runMain jaso.TestApp"'
+alias jasoStartOld='sbt "testuiWithServices/runMain TestUi"'
+alias authStart='sbt "im-app-local/runMain jaso.im.JasoIMLocal"'
 alias karma="node_modules/karma/bin/karma"
 
 
