@@ -51,7 +51,7 @@
 	ignorecase = false
 
 [credential]
-	helper = osxkeychain
+	helper = cache --timeout=7200
 
 [push]
 	default = current
