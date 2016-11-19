@@ -3,7 +3,8 @@
 # Initialize and update all submodules.
 echo ----------------------------
 echo Initializing git submodules.
-git submodule init && git submodule update
+git submodule init
+git submodule update
 
 # Remove all dotfiles from the home directory if present.
 echo ----------------------------
@@ -17,7 +18,7 @@ ln -s "$PWD/.inputrc" ~/.inputrc
 ln -s "$PWD/.gitconfig" ~/.gitconfig
 ln -s "$PWD/.tmux.conf" ~/.tmux.conf
 ln -s "$PWD/.tmux_theme" ~/.tmux_theme
-ln -s "$PWD/module/tmux" ~/.tmux
+ln -s "$PWD/modules/tmux" ~/.tmux
 
 
 # add configs
