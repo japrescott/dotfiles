@@ -13,3 +13,8 @@ function gcp(){
     git push;
 }
 
+
+alias gstl='git stash list'
+alias gstshow='git stash show stash^{/$*}'
+alias gstapply='git stash apply stash^{/$*}'
+

@@ -4,13 +4,27 @@ for method in GET HEAD POST PUT DELETE TRACE OPTIONS; do
 done
 
 
-# Easier navigation: .., ..., ...., ....., ~ and -
-alias ..="cd .."
-alias ...="cd ../.."
-alias ....="cd ../../.."
-alias .....="cd ../../../.."
-alias ~="cd ~" # `cd` is probably faster to type though
-alias -- -="cd -"
+# General UNIX
+alias mv='mv -iv'
+alias cp='cp -iv'
+alias srm='srm -iv'
+alias df='df -h'
+alias du='du -h'
+alias mkdir='mkdir -pv'
+alias ..='cd ..'
+alias ...='cd ../../'
+alias ....='cd ../../../'
+alias .....='cd ../../../../'
+alias .2='cd ../../'
+alias .3='cd ../../../'
+alias .4='cd ../../../../'
+alias .5='cd ../../../../..'
+alias lsa='ls -lahF'
+alias l='ls -lahF'
+alias ll='ls -lhF'
+alias la='ls -lAhF'
+alias lf='ls -F'
+alias lh='ls -d .*'
 
 
 # IP addresses
@@ -29,6 +43,8 @@ if ls --color > /dev/null 2>&1; then # GNU `ls`
 else # OS X `ls`
 	colorflag="-G"
 fi
+
+
 
 # List all files colorized in long format
 alias l="ls -lF ${colorflag}"
