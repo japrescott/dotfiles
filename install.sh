@@ -6,6 +6,11 @@ echo Initializing git submodules.
 git submodule init
 git submodule update
 
+# install some dependencies
+echo ----------------------------
+echo Installing some depedendencies
+apt-get install -a gitk gitx
+
 # Remove all dotfiles from the home directory if present.
 echo ----------------------------
 echo Removing any existing dotfiles from your home directory.
