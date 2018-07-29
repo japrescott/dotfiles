@@ -9,7 +9,7 @@ git submodule update
 # install some dependencies
 echo ----------------------------
 echo Installing some depedendencies
-apt-get install -a gitk gitx
+apt-get -v &> /dev/null && apt-get install -a gitk gitx
 
 # Remove all dotfiles from the home directory if present.
 echo ----------------------------
