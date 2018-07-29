@@ -9,7 +9,16 @@ git submodule update
 # install some dependencies
 echo ----------------------------
 echo Installing some depedendencies
-apt-get -v &> /dev/null && apt-get install -a gitk gitx
+
+dist=`grep DISTRIB_ID /etc/*-release | awk -F '=' '{print $2}'`
+if [ "$dist" == "Ubuntu" ]; then
+	echo "install ubuntu stuff"
+	apt-get install -a gitk gitx
+else
+	echo "installing macosx stuff"
+	brew install tmux
+	
+fi
 
 # Remove all dotfiles from the home directory if present.
 echo ----------------------------
@@ -30,7 +39,7 @@ ln -s "$PWD/modules/tmux" ~/.tmux
 echo ----------------------------
 echo Adding configs
 # IntelliJ
-mkdir ~/.IntelliJIdea15/config/keymaps/
+mkdir -p ~/.IntelliJIdea15/config/keymaps/
 ln -s "$PWD/conf/intellij.keymap.xml" ~/.IntelliJIdea15/config/keymaps/MyOwn.keymap.xml
 
 
