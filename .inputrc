@@ -2,6 +2,9 @@
 set completion-ignore-case on
 set expand-tidle on
 
+# Treat hyphens and underscores as equivalent
+set completion-map-case on
+
 # List all matches in case multiple possible completions are possible
 set show-all-if-ambiguous on
 

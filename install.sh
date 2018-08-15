@@ -13,10 +13,11 @@ echo Installing some depedendencies
 dist=`grep DISTRIB_ID /etc/*-release | awk -F '=' '{print $2}'`
 if [ "$dist" == "Ubuntu" ]; then
 	echo "install ubuntu stuff"
-	apt-get install -a gitk gitx
+	apt-get install -a gitk gitx diff-so-fancy
 else
 	echo "installing macosx stuff"
 	brew install tmux
+	brew install diff-so-fancy
 	
 fi
 
