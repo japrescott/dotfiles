@@ -44,6 +44,11 @@ mkdir -p ~/.IntelliJIdea15/config/keymaps/
 ln -s "$PWD/conf/intellij.keymap.xml" ~/.IntelliJIdea15/config/keymaps/MyOwn.keymap.xml
 
 
+# other fun things
+echo ----------------------------
+echo installing thefuck
+pip install thefuck
+
 # Finished.
 echo ----------------------------
 echo Dotfiles installation complete.

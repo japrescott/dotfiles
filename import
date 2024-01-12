@@ -20,3 +20,5 @@ source ~/dotfiles/.shell_prompt.sh
 
 #Load up all modules
 . ~/dotfiles/modules/z/z.sh
+
+eval $(thefuck --alias fuck)
