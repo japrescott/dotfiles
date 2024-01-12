@@ -10,6 +10,9 @@
 [submodule "modules/tmux/tmux-sensible"]
 	path = modules/tmux/tmux-sensible
 	url = https://github.com/tmux-plugins/tmux-sensible.git
+[submodule "modules/tmux/tmux-sidebar"]
+	path = modules/tmux/tmux-sidebar
+	url = https://github.com/tmux-plugins/tmux-sidebar.git
 [submodule "modules/z"]
 	path = modules/z
 	url = https://github.com/rupa/z.git
