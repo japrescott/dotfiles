@@ -11,13 +11,13 @@ alias gk='gitk --all&'
 alias gx='gitx --all'
 
 function gcp(){
-    git commit -a -m $1;
-    git push;
+    gc -a -m "$1";
+    gp;
 }
 
 function gyolo(){
-    git commit -a -m $1 --no-verify;
-    git push --no-verify;
+    gc -a -m "$1" --no-verify;
+    gp --no-verify;
 }
 
 function gsync(){
@@ -27,9 +27,9 @@ function gsync(){
     if [[ -z $(git status -s) ]]
     then
         gch $1
-        # git pull
-        # gch $CUR_BRANCH
-        # git merge $1
+        git pull
+        gch $CUR_BRANCH
+        git merge $1
     else
         echo "Dirty hobbits with their dirty crumbs all over the branch..."
         exit 1
