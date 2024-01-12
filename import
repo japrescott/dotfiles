@@ -11,6 +11,7 @@ function src() {
   fi
 }
 
+# import all the aliases
 src
 
 #pimp the prompt

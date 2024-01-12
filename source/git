@@ -3,6 +3,8 @@ alias gs='git status '
 alias ga='git add '
 alias gb='git branch '
 alias gc='git commit'
+alias gch='git checkout '
+alias gp='git push'
 alias gd='git diff'
 # dont fuck with golang -> alias go='git checkout '
 alias gk='gitk --all&'
@@ -11,6 +13,31 @@ alias gx='gitx --all'
 function gcp(){
     git commit -a -m $1;
     git push;
+}
+
+function gyolo(){
+    git commit -a -m $1 --no-verify;
+    git push --no-verify;
+}
+
+function gsync(){
+    [ "$#" -eq 0 ] &&  { echo "Usage: gsync [branch]"; exit 1; }
+    CUR_BRANCH=$(git branch --show-current)
+    echo "What ${CUR_BRANCH}"
+    if [[ -z $(git status -s) ]]
+    then
+        gch $1
+        # git pull
+        # gch $CUR_BRANCH
+        # git merge $1
+    else
+        echo "Dirty hobbits with their dirty crumbs all over the branch..."
+        exit 1
+    fi
+}
+
+function gsync-dev(){
+    gsync develop
 }
 
 
