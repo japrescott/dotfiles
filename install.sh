@@ -20,6 +20,7 @@ else
 	brew install diff-so-fancy
 
 	brew install viu # for viewing images in terminal
+	brew install lsix # for viewing images in ls
 	
 fi
 
