@@ -18,6 +18,8 @@ else
 	echo "installing macosx stuff"
 	brew install tmux
 	brew install diff-so-fancy
+
+	brew install viu # for viewing images in terminal
 	
 fi
 
