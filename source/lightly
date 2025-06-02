@@ -1,25 +1,30 @@
-export INSTANCE_ID="i-057fecc88e204df42"
+export AWS_INSTANCE_ID="i-057fecc88e204df42"
+export AWS_DEFAULT_REGION="eu-central-1"
 
 alias ec2_list="aws ec2 describe-instances \
     --output text \
-    --region us-east-1 \
+    --region $AWS_DEFAULT_REGION \
     --query 'Reservations[*].Instances[*].[ \
         InstanceId, \
         InstanceType, \
         State.Name, \
         Tags[?Key==\`Name\`].Value | [0] \
     ]'"
-alias ec2_start="aws ec2 start-instances --instance-ids $INSTANCE_ID"
-alias ec2_stop="aws ec2 stop-instances --instance-ids $INSTANCE_ID"
+alias ec2_start="aws ec2 start-instances --instance-ids $AWS_INSTANCE_ID"
+alias ec2_stop="aws ec2 stop-instances --instance-ids $AWS_INSTANCE_ID"
 alias ec2_cpu="aws ec2 modify-instance-attribute \
-    --instance-id $INSTANCE_ID \
+    --instance-id $AWS_INSTANCE_ID \
+	--region $AWS_DEFAULT_REGION \
     --instance-type '{\"Value\": \"t3.xlarge\"}'"
 alias ec2_gpu="aws ec2 modify-instance-attribute \
-    --instance-id $INSTANCE_ID \
+    --instance-id $AWS_INSTANCE_ID \
+	--region $AWS_DEFAULT_REGION \
     --instance-type '{\"Value\": \"g4dn.2xlarge\"}'"
 alias ec2_gpu4x="aws ec2 modify-instance-attribute \
-    --instance-id $INSTANCE_ID \
+    --instance-id $AWS_INSTANCE_ID \
+	--region $AWS_DEFAULT_REGION \
     --instance-type '{\"Value\": \"g4dn.4xlarge\"}'"
 alias ec2_cpu_m7iflex="aws ec2 modify-instance-attribute \
-    --instance-id $INSTANCE_ID \
+    --instance-id $AWS_INSTANCE_ID \
+	--region $AWS_DEFAULT_REGION \
     --instance-type '{\"Value\": \"m7i-flex.xlarge\"}'"
