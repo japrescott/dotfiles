@@ -81,7 +81,13 @@ else
 	brew install diff-so-fancy
 
 	brew install viu # for viewing images in terminal
-	brew install lsix # for viewing images in ls	
+	brew install lsix # for viewing images in ls
+
+	# yazi - Blazing fast terminal file manager written in Rust, based on async I/O.
+	brew install yazi ffmpeg sevenzip jq poppler fd ripgrep fzf zoxide resvg imagemagick font-symbols-only-nerd-font
+	# yazi - fallback for image decoding
+	brew install chafa
+
 fi
 
 

@@ -1,4 +1,4 @@
-export AWS_INSTANCE_ID="i-057fecc88e204df42"
+export AWS_INSTANCE_ID="i-0bc21d3e24f4b0aca"
 export AWS_DEFAULT_REGION="eu-central-1"
 
 alias ec2_list="aws ec2 describe-instances \
