@@ -103,6 +103,9 @@ else
 	# yazi - fallback for image decoding
 	brew install chafa
 
+	# EZA -> ls replacemnet
+	brew install eza
+
 fi
 
 
