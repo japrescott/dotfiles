@@ -1,6 +1,6 @@
 
 #Get all Alias Sources
-function src() {
+function src_alias() {
   local file
   if [[ "$1" ]]; then
     source "$HOME/dotfiles/source/$1.sh"
@@ -12,11 +12,11 @@ function src() {
 }
 
 # import all the aliases
-src
+src_alias
+
 
 #pimp the prompt
 source ~/dotfiles/.shell_prompt.sh
-
 
 #Load up all modules
 . ~/dotfiles/modules/z/z.sh

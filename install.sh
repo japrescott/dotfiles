@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -i
 
 
 echo ----------------------------
@@ -39,8 +39,8 @@ ln -s "$PWD/modules/tmux" ~/.tmux
 echo ----------------------------
 echo Adding configs
 # IntelliJ
-mkdir -p ~/.IntelliJIdea15/config/keymaps/
-ln -s "$PWD/conf/intellij.keymap.xml" ~/.IntelliJIdea15/config/keymaps/MyOwn.keymap.xml
+#mkdir -p ~/.IntelliJIdea15/config/keymaps/
+#ln -s "$PWD/conf/intellij.keymap.xml" ~/.IntelliJIdea15/config/keymaps/MyOwn.keymap.xml
 
 
 
@@ -64,6 +64,21 @@ npm install -g \
 	ts-node \
 	tsx \
 	json-log-viewer
+
+
+# install python via uv
+echo ----------------------------
+echo Installing python via uv
+curl -LsSf https://astral.sh/uv/install.sh | sh
+uv python install 3.12
+uv python pin 3.12
+uv generate-shell-completion zsh
+
+# Install python tools
+uv tool install black
+uv tool install jupyter
+uv tool install ruff
+
 
 
 
@@ -92,9 +107,10 @@ fi
 
 
 # other fun things
-echo ----------------------------
-echo installing thefuck
-pip install thefuck
+# echo ----------------------------
+# echo installing thefuck
+# uv tool install thefuck # pip install thefuck
+uv tool install --python 3.11 thefuck
 
 # Finished.
 echo ----------------------------

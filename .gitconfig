@@ -1,10 +1,15 @@
-# [user]
-# 	name = Jeremy A. Prescott
-# 	email = jap@prescore.ch
-
 [user]
 	name = Jeremy A. Prescott
-	email = jeremy@lightly.ai
+	email = jap@prescore.ch
+
+# [user]
+# 	name = Jeremy A. Prescott
+# 	email = jeremy@lightly.ai
+
+
+# [user]
+# 	name = Jeremy A. Prescott
+# 	email = jeremy@roboflow.com
 
 
 [color]

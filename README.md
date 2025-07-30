@@ -1,6 +1,9 @@
 dotfiles
 ========
 
--> add to ~/.bashrc;
+## install
 
+ add to ~/.bashrc or ~/.zshrc
+```sh
 source ~/dotfiles/import
+```
