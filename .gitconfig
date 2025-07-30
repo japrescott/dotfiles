@@ -32,6 +32,7 @@
 	br = branch
 	d = diff
 	dt = difftool
+	fuck = !sh -c 'git commit --amend' -
     fixup = !sh -c 'git commit -m \"fixup! $(git log -1 --format='\\''%s'\\'' $@)\"' -
     squash = !sh -c 'git commit -m \"squash! $(git log -1 --format='\\''%s'\\'' $@)\"' -
     ri = rebase --interactive --autosquash
