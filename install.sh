@@ -72,6 +72,7 @@ echo Installing python via uv
 curl -LsSf https://astral.sh/uv/install.sh | sh
 uv python install 3.12
 uv python pin 3.12
+uv python install --default 3.12
 uv generate-shell-completion zsh
 
 # Install python tools
@@ -105,6 +106,9 @@ else
 
 	# EZA -> ls replacemnet
 	brew install eza
+
+	# youtube-dl replacement
+	brew install yt-dlp 
 
 fi
 
