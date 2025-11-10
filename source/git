@@ -1,7 +1,7 @@
 #GIT
 alias gs='git status '
 alias ga='git add '
-alias gb='git branch '
+#alias gb='git branch '
 alias gc='git commit'
 alias gch='git checkout '
 alias gp='git push'
@@ -48,6 +48,6 @@ alias gstshow='git stash show stash^{/$*}'
 alias gstapply='git stash apply stash^{/$*}'
 
 # interactive git checkout
-function gc() {
+function gb() {
     git checkout $(git branch "$@" -vv --sort=-committerdate | fzf --header 'git checkout' | awk '{print $1}' | sed 's#remotes/origin/##' | xargs)
 }
