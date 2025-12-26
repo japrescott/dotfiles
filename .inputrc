@@ -1,6 +1,6 @@
 # Make Tab autocomplete regardless of filename case
 set completion-ignore-case on
-set expand-tidle on
+set expand-tilde on
 
 # Treat hyphens and underscores as equivalent
 set completion-map-case on
