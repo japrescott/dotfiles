@@ -1,7 +1,7 @@
 #GIT
 alias gs='git status '
 alias ga='git add '
-alias gb='git branch '
+#alias gb='git branch '
 alias gc='git commit'
 alias gch='git checkout '
 alias gp='git push'
@@ -10,11 +10,13 @@ alias gd='git diff'
 alias gk='gitk --all&'
 alias gx='gitx --all'
 
+# git commit and push
 function gcp(){
     gc -a -m "$1";
     gp;
 }
 
+# git yolo
 function gyolo(){
     gc -a -m "$1" --no-verify;
     gp --no-verify;
@@ -45,3 +47,7 @@ alias gstl='git stash list'
 alias gstshow='git stash show stash^{/$*}'
 alias gstapply='git stash apply stash^{/$*}'
 
+# interactive git checkout
+function gb() {
+    git checkout $(git branch "$@" -vv --sort=-committerdate | fzf --header 'git checkout' | awk '{print $1}' | sed 's#remotes/origin/##' | xargs)
+}
