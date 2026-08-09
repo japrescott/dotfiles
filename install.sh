@@ -98,7 +98,10 @@ if [ "$dist" == "Ubuntu" ]; then
 else
 	echo "installing macosx stuff"
 	brew install tmux
-	brew install diff-so-fancy
+	brew install git-delta # syntax-highlighted git pager (replaces diff-so-fancy)
+
+	# zsh niceties: inline history suggestions + command syntax highlighting
+	brew install zsh-autosuggestions zsh-syntax-highlighting
 
 	brew install viu # for viewing images in terminal
 	brew install lsix # for viewing images in ls
@@ -121,10 +124,9 @@ fi
 
 
 # other fun things
-# echo ----------------------------
-# echo installing thefuck
-# uv tool install thefuck # pip install thefuck
-uv tool install --python 3.11 thefuck
+echo ----------------------------
+echo installing pay-respects # command corrector, replaces the abandoned thefuck
+curl -sSfL https://raw.githubusercontent.com/iffse/pay-respects/main/install.sh | sh -s -- --sudo ""
 
 # Finished.
 echo ----------------------------

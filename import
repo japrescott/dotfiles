@@ -21,4 +21,12 @@ command -v starship >/dev/null && eval "$(starship init zsh)"
 #directory jumping (z command, provided by zoxide)
 command -v zoxide >/dev/null && eval "$(zoxide init zsh --cmd z)"
 
-eval $(thefuck --alias fuck)
+#fix the previous command (fuck alias, provided by pay-respects)
+command -v pay-respects >/dev/null && eval "$(pay-respects zsh --alias fuck)"
+
+#zsh niceties: inline history suggestions + command syntax highlighting
+#(syntax highlighting must be sourced last)
+BREW_SHARE="${HOMEBREW_PREFIX:-/opt/homebrew}/share"
+[ -f "$BREW_SHARE/zsh-autosuggestions/zsh-autosuggestions.zsh" ] && source "$BREW_SHARE/zsh-autosuggestions/zsh-autosuggestions.zsh"
+[ -f "$BREW_SHARE/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ] && source "$BREW_SHARE/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+unset BREW_SHARE
