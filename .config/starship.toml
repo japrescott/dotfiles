@@ -1,0 +1,14 @@
+# Starship prompt — https://starship.rs
+# Replaces the promptline.vim-generated .shell_prompt.sh.
+# Colors come from the terminal theme (Gruvbox Dark via ghostty config),
+# so the prompt adapts to any light/dark background automatically.
+
+add_newline = false
+
+[directory]
+# Match the old prompt's habit: show at most 3 path segments.
+truncation_length = 3
+truncation_symbol = "…/"
+
+[cmd_duration]
+min_time = 2000

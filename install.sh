@@ -23,7 +23,7 @@ git submodule update
 # Remove all dotfiles from the home directory if present.
 echo ----------------------------
 echo Removing any existing dotfiles from your home directory.
-rm -rf ~/.gitconfig ~/.tmux.conf ~/.tmux_theme ~/.tmux ~/.inputrc
+rm -rf ~/.gitconfig ~/.tmux.conf ~/.tmux_theme ~/.tmux ~/.inputrc ~/.config/ghostty ~/.config/starship.toml
 
 # Initialize symlinks.
 echo ----------------------------
@@ -33,6 +33,10 @@ ln -s "$PWD/.gitconfig" ~/.gitconfig
 ln -s "$PWD/.tmux.conf" ~/.tmux.conf
 ln -s "$PWD/.tmux_theme" ~/.tmux_theme
 ln -s "$PWD/modules/tmux" ~/.tmux
+# Ghostty terminal config — also read by cmux (first hit in its config search order).
+mkdir -p ~/.config
+ln -s "$PWD/.config/ghostty" ~/.config/ghostty
+ln -s "$PWD/.config/starship.toml" ~/.config/starship.toml
 
 
 # add configs
@@ -98,6 +102,9 @@ else
 
 	brew install viu # for viewing images in terminal
 	brew install lsix # for viewing images in ls
+
+	# prompt (replaces the old promptline .shell_prompt.sh)
+	brew install starship
 
 	# yazi - Blazing fast terminal file manager written in Rust, based on async I/O.
 	brew install yazi ffmpeg sevenzip jq poppler fd ripgrep fzf zoxide resvg imagemagick font-symbols-only-nerd-font

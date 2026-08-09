@@ -1,0 +1,12 @@
+# Shared terminal config — read by both cmux and standalone Ghostty.
+# cmux checks this path FIRST and stops at the first file it finds,
+# so this wins over the empty stub in ~/Library/Application Support/com.mitchellh.ghostty/.
+# Reload inside cmux with Cmd+Shift+, (cmux -> Reload Configuration).
+
+# The dotfiles prompt (~/dotfiles/.shell_prompt.sh) and tmux theme use a
+# gruvbox palette designed for a dark background — match it here so the
+# terminal stays dark even while macOS is in light mode.
+theme = Gruvbox Dark
+
+# Never let text render invisibly against the background.
+minimum-contrast = 1.3

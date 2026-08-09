@@ -16,9 +16,9 @@ src_alias
 
 
 #pimp the prompt
-source ~/dotfiles/.shell_prompt.sh
+command -v starship >/dev/null && eval "$(starship init zsh)"
 
-#Load up all modules
-. ~/dotfiles/modules/z/z.sh
+#directory jumping (z command, provided by zoxide)
+command -v zoxide >/dev/null && eval "$(zoxide init zsh --cmd z)"
 
 eval $(thefuck --alias fuck)
