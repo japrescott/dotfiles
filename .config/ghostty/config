@@ -3,10 +3,9 @@
 # so this wins over the empty stub in ~/Library/Application Support/com.mitchellh.ghostty/.
 # Reload inside cmux with Cmd+Shift+, (cmux -> Reload Configuration).
 
-# The dotfiles prompt (~/dotfiles/.shell_prompt.sh) and tmux theme use a
-# gruvbox palette designed for a dark background — match it here so the
-# terminal stays dark even while macOS is in light mode.
-theme = Gruvbox Dark
+# Duckbones (zenbones family): near-monochrome ink with duck-bill orange
+# and pond-water blue accents; stays dark regardless of macOS appearance.
+theme = Duckbones
 
 # Never let text render invisibly against the background.
 minimum-contrast = 1.3
