@@ -21,6 +21,9 @@ command -v starship >/dev/null && eval "$(starship init zsh)"
 #directory jumping (z command, provided by zoxide)
 command -v zoxide >/dev/null && eval "$(zoxide init zsh --cmd z)"
 
+#runtime versions: node + python (replaces nvm; uv handles venvs/tools)
+command -v mise >/dev/null && eval "$(mise activate zsh)"
+
 #fix the previous command (fuck alias, provided by pay-respects)
 command -v pay-respects >/dev/null && eval "$(pay-respects zsh --alias fuck)"
 

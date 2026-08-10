@@ -23,7 +23,7 @@ git submodule update
 # Remove all dotfiles from the home directory if present.
 echo ----------------------------
 echo Removing any existing dotfiles from your home directory.
-rm -rf ~/.gitconfig ~/.tmux.conf ~/.tmux_theme ~/.tmux ~/.inputrc ~/.config/ghostty ~/.config/starship.toml
+rm -rf ~/.gitconfig ~/.tmux.conf ~/.tmux_theme ~/.tmux ~/.inputrc ~/.config/ghostty ~/.config/starship.toml ~/.config/mise
 
 # Initialize symlinks.
 echo ----------------------------
@@ -37,6 +37,7 @@ ln -s "$PWD/modules/tmux" ~/.tmux
 mkdir -p ~/.config
 ln -s "$PWD/.config/ghostty" ~/.config/ghostty
 ln -s "$PWD/.config/starship.toml" ~/.config/starship.toml
+ln -s "$PWD/.config/mise" ~/.config/mise
 
 
 # add configs
@@ -48,22 +49,20 @@ echo Adding configs
 
 
 
-# installing node via nvm
+# runtimes (node, python) via mise — versions pinned in .config/mise/config.toml
 echo ----------------------------
-echo Installing Node.js via nvm.
-if [ ! -d "$HOME/.nvm" ]; then
-	echo "Installing nvm"
-	curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
-	export NVM_DIR="$HOME/.nvm"
-	[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+echo Installing runtimes via mise.
+if [ "$dist" == "Ubuntu" ]; then
+	curl -fsSL https://mise.run | sh
+else
+	brew install mise
 fi
-nvm install --lts
-nvm use --lts
+mise install
 
 # Install global npm packages.
 echo ----------------------------
 echo Installing global npm packages.
-npm install -g \
+mise exec -- npm install -g \
 	typescript \
 	ts-node \
 	tsx \
