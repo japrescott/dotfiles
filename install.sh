@@ -38,6 +38,10 @@ mkdir -p ~/.config
 ln -s "$PWD/.config/ghostty" ~/.config/ghostty
 ln -s "$PWD/.config/starship.toml" ~/.config/starship.toml
 ln -s "$PWD/.config/mise" ~/.config/mise
+# navi snippet cheatsheets
+rm -rf ~/.local/share/navi/cheats
+mkdir -p ~/.local/share/navi
+ln -s "$PWD/cheats" ~/.local/share/navi/cheats
 
 
 # add configs
@@ -99,8 +103,16 @@ else
 	brew install tmux
 	brew install git-delta # syntax-highlighted git pager (replaces diff-so-fancy)
 
-	# zsh niceties: inline history suggestions + command syntax highlighting
-	brew install zsh-autosuggestions zsh-syntax-highlighting
+	# zsh niceties: inline history suggestions + command syntax highlighting,
+	# tab completion through fzf, fish-style abbreviations
+	brew install zsh-autosuggestions zsh-syntax-highlighting fzf-tab olets/tap/zsh-abbr
+
+	# snippets & cheatsheets: navi (Ctrl-G, cheats in ./cheats), tldr examples
+	brew install navi tealdeer
+	tldr --update
+
+	# modern du/df/sed/ps alternatives + CLI benchmarking
+	brew install dust duf sd hyperfine procs
 
 	brew install viu # for viewing images in terminal
 	brew install lsix # for viewing images in ls

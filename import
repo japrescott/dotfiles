@@ -27,9 +27,27 @@ command -v mise >/dev/null && eval "$(mise activate zsh)"
 #fix the previous command (fuck alias, provided by pay-respects)
 command -v pay-respects >/dev/null && eval "$(pay-respects zsh --alias fuck)"
 
-#zsh niceties: inline history suggestions + command syntax highlighting
-#(syntax highlighting must be sourced last)
+#history: keep 100k commands (macOS default caps at 1k), shared and deduped
+HISTSIZE=110000
+SAVEHIST=100000
+setopt EXTENDED_HISTORY SHARE_HISTORY HIST_IGNORE_ALL_DUPS HIST_IGNORE_SPACE HIST_REDUCE_BLANKS
+
+#fzf keybindings: Ctrl-R fuzzy history, Ctrl-T fuzzy files, Alt-C fuzzy cd
+command -v fzf >/dev/null && source <(fzf --zsh)
+
+#snippet cheatsheets on Ctrl-G (cheats live in ~/dotfiles/cheats)
+command -v navi >/dev/null && eval "$(navi widget zsh)"
+
+#zsh niceties, in required order: completions through fzf (needs compinit),
+#fish-style abbreviations, inline history suggestions, then syntax
+#highlighting which must always be sourced last
 BREW_SHARE="${HOMEBREW_PREFIX:-/opt/homebrew}/share"
+(( ${+_comps} )) || { autoload -Uz compinit && compinit }
+[ -f "$BREW_SHARE/fzf-tab/fzf-tab.zsh" ] && source "$BREW_SHARE/fzf-tab/fzf-tab.zsh"
+if [ -f "$BREW_SHARE/zsh-abbr/zsh-abbr.zsh" ]; then
+	export ABBR_USER_ABBREVIATIONS_FILE=~/dotfiles/.config/zsh-abbr/user-abbreviations
+	source "$BREW_SHARE/zsh-abbr/zsh-abbr.zsh"
+fi
 [ -f "$BREW_SHARE/zsh-autosuggestions/zsh-autosuggestions.zsh" ] && source "$BREW_SHARE/zsh-autosuggestions/zsh-autosuggestions.zsh"
 [ -f "$BREW_SHARE/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ] && source "$BREW_SHARE/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 unset BREW_SHARE
