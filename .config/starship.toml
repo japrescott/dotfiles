@@ -5,14 +5,14 @@
 
 add_newline = false
 
+# clock at the right margin: when each prompt appeared; the gap between two
+# timestamps is the wall time from one command to the next
+right_format = "$time"
+
 [directory]
 # Match the old prompt's habit: show at most 3 path segments.
 truncation_length = 3
 truncation_symbol = "…/"
-
-# clock at the right margin: when each prompt appeared; the gap between two
-# timestamps is the wall time from one command to the next
-right_format = "$time"
 
 [time]
 disabled = false
