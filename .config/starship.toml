@@ -9,9 +9,18 @@ add_newline = false
 # timestamps is the wall time from one command to the next
 right_format = "$time"
 
+# language/file detection scan budget per prompt; the 30ms default times out
+# (with a warning) in big working trees like zipper's
+scan_timeout = 120
+
+# statusline inside Claude Code: model, dir, git, context gauge, session cost
+# (used by "starship statusline claude-code", see ~/.claude/settings.json)
+[profiles]
+claude-code = "$claude_model$directory$git_branch$git_status$claude_context$claude_cost"
+
 [directory]
-# Match the old prompt's habit: show at most 3 path segments.
-truncation_length = 3
+# Show the last two folders, current folder always in full.
+truncation_length = 2
 truncation_symbol = "…/"
 
 [time]
