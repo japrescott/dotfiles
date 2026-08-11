@@ -12,3 +12,27 @@ truncation_symbol = "…/"
 
 [cmd_duration]
 min_time = 2000
+
+[git_branch]
+format = "on [$symbol$branch]($style) "
+
+# spell out the working-tree state with counts, e.g. [+1 !3 ?2 ⇡1]
+[git_status]
+format = '([\[$all_status$ahead_behind\]]($style) )'
+staged = "+$count"
+modified = "!$count"
+untracked = "?$count"
+deleted = "✘$count"
+stashed = ""
+ahead = "⇡$count"
+behind = "⇣$count"
+diverged = "⇕⇡$ahead_count⇣$behind_count"
+
+# docker context, when the dir has a Dockerfile/compose and context isn't default
+[docker_context]
+format = "via [$symbol$context]($style) "
+
+# active GCP project (more useful and less leaky than the account email)
+[gcloud]
+format = 'on [$symbol$project]($style) '
+symbol = "☁️ "
