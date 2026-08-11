@@ -22,6 +22,7 @@ claude-code = "$claude_model$directory$git_branch$git_status$claude_context$clau
 # Show the last two folders, current folder always in full.
 truncation_length = 2
 truncation_symbol = "…/"
+truncate_to_repo = false
 
 [time]
 disabled = false
