@@ -10,8 +10,20 @@ add_newline = false
 truncation_length = 3
 truncation_symbol = "…/"
 
+# clock at the right margin: when each prompt appeared; the gap between two
+# timestamps is the wall time from one command to the next
+right_format = "$time"
+
+[time]
+disabled = false
+format = "[$time]($style)"
+time_format = "%H:%M:%S"
+style = "dimmed"
+
+# how long the previous command ran; shows for anything over half a second
 [cmd_duration]
-min_time = 2000
+min_time = 500
+show_milliseconds = true
 
 [git_branch]
 format = "on [$symbol$branch]($style) "
