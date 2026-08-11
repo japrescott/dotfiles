@@ -19,9 +19,10 @@ scan_timeout = 120
 claude-code = "$claude_model$directory$git_branch$git_status$claude_context$claude_cost"
 
 [directory]
-# Show the last two folders, current folder always in full.
+# Last two folders in full; everything above as 3-char fish-style crumbs,
+# e.g. ~/Pro/zip/scripts/ingest
 truncation_length = 2
-truncation_symbol = "…/"
+fish_style_pwd_dir_length = 3
 truncate_to_repo = false
 
 [time]
