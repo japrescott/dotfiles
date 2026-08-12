@@ -24,8 +24,10 @@ $gcloud\
 [ ](fg:#262c1e)\
 \n$character"""
 
-# previous command's duration and the clock stay at the right margin
-right_format = "$cmd_duration$time"
+# previous command's duration and the clock stay at the right margin;
+# duration comes from the zsh hook in ~/dotfiles/import (PROMPT_DURATION),
+# which zero-pads ms so "1s034ms" and "1s340ms" line up
+right_format = "${env_var.PROMPT_DURATION}$time"
 
 # language/file detection scan budget per prompt; the 30ms default times out
 # (with a warning) in big working trees like zipper's
@@ -95,11 +97,9 @@ symbol = "☁️ "
 style = "bg:#262c1e"
 format = '[[ $symbol$project ](fg:#87af5f bg:#262c1e)]($style)'
 
-# how long the previous command ran; shows for anything over half a second
-[cmd_duration]
-min_time = 500
-show_milliseconds = true
-format = '[󰔟 $duration](fg:#a9bd85) '
+# how long the previous command ran (computed in import, see right_format)
+[env_var.PROMPT_DURATION]
+format = '[󰔟 $env_value](fg:#a9bd85) '
 
 [time]
 disabled = false
