@@ -6,9 +6,9 @@
 # (e.g. a new corporate machine) fall back to a generic glyph + hostname —
 # add a case for them here once they have a name.
 case "${(L)HOST%%.*}" in
-	mac|jeremys-macbook-air) PROMPT_MACHINE="󰋜" ;;  # private laptop
-	minix)                   PROMPT_MACHINE="󰕈 minix" ;;  # ubuntu box
-	*)                       PROMPT_MACHINE=" ${(L)HOST%%.*}" ;;
+	mac|jeremys-macbook-air) PROMPT_MACHINE="󰋜 󰇸" ;;  # private laptop: home + happy
+	minix)                   PROMPT_MACHINE="󰋜 󰕈" ;;  # home ubuntu box
+	*)                       PROMPT_MACHINE=" 󰚩" ;;  # corporate: office + robot
 esac
 export PROMPT_MACHINE
 
