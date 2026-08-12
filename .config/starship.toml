@@ -25,8 +25,8 @@ $gcloud\
 \n$character"""
 
 # previous command's duration and the clock stay at the right margin;
-# duration comes from the zsh hook in ~/dotfiles/import (PROMPT_DURATION),
-# which zero-pads ms so "1s034ms" and "1s340ms" line up
+# duration comes from the zsh hook in ~/dotfiles/source/prompt
+# (PROMPT_DURATION), which zero-pads ms so "1s034ms" and "1s340ms" line up
 right_format = "${env_var.PROMPT_DURATION}$time"
 
 # language/file detection scan budget per prompt; the 30ms default times out
