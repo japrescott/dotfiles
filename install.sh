@@ -102,6 +102,7 @@ else
 	echo "installing macosx stuff"
 	brew install tmux
 	brew install git-delta # syntax-highlighted git pager (replaces diff-so-fancy)
+	brew install bat # cat with syntax highlighting; fzf Ctrl-T preview
 
 	# zsh niceties: inline history suggestions + command syntax highlighting,
 	# tab completion through fzf, fish-style abbreviations
