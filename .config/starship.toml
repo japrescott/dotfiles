@@ -10,7 +10,7 @@ add_newline = false
 
 format = """
 [░▒▓](#b4c78e)\
-$os\
+${env_var.PROMPT_MACHINE}\
 [](bg:#87af5f fg:#b4c78e)\
 $directory\
 [](fg:#87af5f bg:#3a422e)\
@@ -38,15 +38,9 @@ scan_timeout = 120
 [profiles]
 claude-code = "$claude_model$directory$git_branch$git_status$claude_context$claude_cost"
 
-[os]
-disabled = false
-style = "bg:#b4c78e fg:#1d2412"
-format = "[ $symbol ]($style)"
-
-[os.symbols]
-Macos = "󰀵"
-Ubuntu = "󰕈"
-Linux = "󰌽"
+# per-machine badge, set by the hostname case in ~/dotfiles/source/prompt
+[env_var.PROMPT_MACHINE]
+format = "[ $env_value ](bg:#b4c78e fg:#1d2412)"
 
 [directory]
 # Last two folders in full; everything above as 3-char fish-style crumbs,

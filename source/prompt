@@ -1,6 +1,17 @@
 # Prompt support code. The prompt itself is starship (.config/starship.toml);
 # this file provides what starship can't do on its own.
 
+# Per-machine badge for the prompt's leading pill (replaces the generic OS
+# logo). Rendered by starship's env_var.PROMPT_MACHINE module. Unknown hosts
+# (e.g. a new corporate machine) fall back to a generic glyph + hostname —
+# add a case for them here once they have a name.
+case "${(L)HOST%%.*}" in
+	mac|jeremys-macbook-air) PROMPT_MACHINE="󰋜" ;;  # private laptop
+	minix)                   PROMPT_MACHINE="󰕈 minix" ;;  # ubuntu box
+	*)                       PROMPT_MACHINE=" ${(L)HOST%%.*}" ;;
+esac
+export PROMPT_MACHINE
+
 # Track the previous command's duration with zero-padded ms ("1s034ms"),
 # rendered by starship's env_var.PROMPT_DURATION module (its own cmd_duration
 # can't pad). Hidden under 100ms; minutes drop the ms ("2m05s").
