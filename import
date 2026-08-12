@@ -43,7 +43,7 @@ _initcache pay-respects zsh --alias fuck
 
 #track the previous command's duration with zero-padded ms ("1s034ms"),
 #rendered by starship's env_var.PROMPT_DURATION module (its own cmd_duration
-#can't pad). Hidden under 500ms; minutes drop the ms ("2m05s").
+#can't pad). Hidden under 100ms; minutes drop the ms ("2m05s").
 zmodload zsh/datetime
 _dur_preexec() { _dur_start=$EPOCHREALTIME; }
 _dur_precmd() {
@@ -54,7 +54,7 @@ _dur_precmd() {
 			printf -v PROMPT_DURATION '%dm%02ds' $(( ms / 60000 )) $(( ms % 60000 / 1000 ))
 		elif (( ms >= 1000 )); then
 			printf -v PROMPT_DURATION '%ds%03dms' $(( ms / 1000 )) $(( ms % 1000 ))
-		elif (( ms >= 500 )); then
+		elif (( ms >= 100 )); then
 			printf -v PROMPT_DURATION '%dms' $ms
 		else
 			unset PROMPT_DURATION; return
