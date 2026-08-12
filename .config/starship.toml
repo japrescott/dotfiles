@@ -21,11 +21,11 @@ $nodejs\
 $python\
 $docker_context\
 $gcloud\
-[](fg:#262c1e bg:#1c2115)\
-$cmd_duration\
-$time\
-[ ](fg:#1c2115)\
+[ ](fg:#262c1e)\
 \n$character"""
+
+# previous command's duration and the clock stay at the right margin
+right_format = "$cmd_duration$time"
 
 # language/file detection scan budget per prompt; the 30ms default times out
 # (with a warning) in big working trees like zipper's
@@ -99,11 +99,9 @@ format = '[[ $symbol$project ](fg:#87af5f bg:#262c1e)]($style)'
 [cmd_duration]
 min_time = 500
 show_milliseconds = true
-style = "bg:#1c2115"
-format = '[[ 󰔟 $duration ](fg:#a9bd85 bg:#1c2115)]($style)'
+format = '[󰔟 $duration](fg:#a9bd85) '
 
 [time]
 disabled = false
 time_format = "%H:%M:%S"
-style = "bg:#1c2115"
-format = '[[  $time ](fg:#a9bd85 bg:#1c2115)]($style)'
+format = '[$time](dimmed)'
