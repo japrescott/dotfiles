@@ -23,7 +23,7 @@ git submodule update
 # Remove all dotfiles from the home directory if present.
 echo ----------------------------
 echo Removing any existing dotfiles from your home directory.
-rm -rf ~/.gitconfig ~/.tmux.conf ~/.tmux_theme ~/.tmux ~/.inputrc
+rm -rf ~/.gitconfig ~/.tmux.conf ~/.tmux_theme ~/.tmux ~/.inputrc ~/.config/ghostty ~/.config/starship.toml ~/.config/mise
 
 # Initialize symlinks.
 echo ----------------------------
@@ -33,6 +33,15 @@ ln -s "$PWD/.gitconfig" ~/.gitconfig
 ln -s "$PWD/.tmux.conf" ~/.tmux.conf
 ln -s "$PWD/.tmux_theme" ~/.tmux_theme
 ln -s "$PWD/modules/tmux" ~/.tmux
+# Ghostty terminal config — also read by cmux (first hit in its config search order).
+mkdir -p ~/.config
+ln -s "$PWD/.config/ghostty" ~/.config/ghostty
+ln -s "$PWD/.config/starship.toml" ~/.config/starship.toml
+ln -s "$PWD/.config/mise" ~/.config/mise
+# navi snippet cheatsheets
+rm -rf ~/.local/share/navi/cheats
+mkdir -p ~/.local/share/navi
+ln -s "$PWD/cheats" ~/.local/share/navi/cheats
 
 
 # add configs
@@ -44,22 +53,20 @@ echo Adding configs
 
 
 
-# installing node via nvm
+# runtimes (node, python) via mise — versions pinned in .config/mise/config.toml
 echo ----------------------------
-echo Installing Node.js via nvm.
-if [ ! -d "$HOME/.nvm" ]; then
-	echo "Installing nvm"
-	curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
-	export NVM_DIR="$HOME/.nvm"
-	[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+echo Installing runtimes via mise.
+if [ "$dist" == "Ubuntu" ]; then
+	curl -fsSL https://mise.run | sh
+else
+	brew install mise
 fi
-nvm install --lts
-nvm use --lts
+mise install
 
 # Install global npm packages.
 echo ----------------------------
 echo Installing global npm packages.
-npm install -g \
+mise exec -- npm install -g \
 	typescript \
 	ts-node \
 	tsx \
@@ -94,10 +101,25 @@ if [ "$dist" == "Ubuntu" ]; then
 else
 	echo "installing macosx stuff"
 	brew install tmux
-	brew install diff-so-fancy
+	brew install git-delta # syntax-highlighted git pager (replaces diff-so-fancy)
+	brew install bat # cat with syntax highlighting; fzf Ctrl-T preview
+
+	# zsh niceties: inline history suggestions + command syntax highlighting,
+	# tab completion through fzf, fish-style abbreviations
+	brew install zsh-autosuggestions zsh-syntax-highlighting fzf-tab olets/tap/zsh-abbr
+
+	# snippets & cheatsheets: navi (Ctrl-G, cheats in ./cheats), tldr examples
+	brew install navi tealdeer
+	tldr --update
+
+	# modern du/df/sed/ps alternatives + CLI benchmarking
+	brew install dust duf sd hyperfine procs
 
 	brew install viu # for viewing images in terminal
 	brew install lsix # for viewing images in ls
+
+	# prompt (replaces the old promptline .shell_prompt.sh)
+	brew install starship
 
 	# yazi - Blazing fast terminal file manager written in Rust, based on async I/O.
 	brew install yazi ffmpeg sevenzip jq poppler fd ripgrep fzf zoxide resvg imagemagick font-symbols-only-nerd-font
@@ -114,10 +136,9 @@ fi
 
 
 # other fun things
-# echo ----------------------------
-# echo installing thefuck
-# uv tool install thefuck # pip install thefuck
-uv tool install --python 3.11 thefuck
+echo ----------------------------
+echo installing pay-respects # command corrector, replaces the abandoned thefuck
+curl -sSfL https://raw.githubusercontent.com/iffse/pay-respects/main/install.sh | sh -s -- --sudo ""
 
 # Finished.
 echo ----------------------------

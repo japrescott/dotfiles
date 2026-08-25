@@ -1,3 +1,14 @@
+# ── prompt_nostalgia ─────────────────────────────────────────────────────
+# The promptline.vim-generated prompt that powered this shell from ~2015
+# until 2026-08-10 (retired in favor of starship, commit a673fa4).
+# Gruvbox 256-color segments: user @ dark-on-green (107), cwd green-on-grey
+# (106/238), git on grey 240, powerline glyphs throughout.
+#
+# To visit 2015 for one session, run:   zsh -f
+# then:                                 source ~/dotfiles/prompt_nostalgia.sh
+# (a bare zsh, so it doesn't fight starship's precmd hooks)
+# ─────────────────────────────────────────────────────────────────────────
+
 #
 # This shell prompt config file was created by promptline.vim
 #

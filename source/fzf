@@ -1,0 +1,8 @@
+# fzf configuration. The keybindings themselves (Ctrl-R/Ctrl-T/Alt-C) are
+# wired in ../import via `fzf --zsh`; this sets what the pickers look like.
+
+# Ctrl-T: preview pane — syntax-highlighted files (bat), tree for directories
+export FZF_CTRL_T_OPTS="--preview 'if [ -d {} ]; then eza --tree -L 2 --color=always {}; else bat --color=always --style=numbers --line-range=:200 {}; fi' --preview-window=right,55%,border-left"
+
+# Alt-C: show the tree of the directory you are about to jump into
+export FZF_ALT_C_OPTS="--preview 'eza --tree -L 2 --color=always {}' --preview-window=right,55%,border-left"

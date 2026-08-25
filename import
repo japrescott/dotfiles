@@ -15,10 +15,65 @@ function src_alias() {
 src_alias
 
 
+#run a tool's shell-init through a file cache: spawning each tool costs
+#30-90ms while its init script only changes on upgrades, so cache the output
+#and re-generate when the tool's binary is newer than the cache
+_initcache() {
+	(( $+commands[$1] )) || return 0
+	local key="${(j:-:)@}"
+	local f=~/.cache/zsh-init-cache/"${key//\//%}".zsh
+	if [[ ! -f $f || ${commands[$1]} -nt $f ]]; then
+		mkdir -p ~/.cache/zsh-init-cache
+		"$@" > "$f"
+	fi
+	source "$f"
+}
+
 #pimp the prompt
-source ~/dotfiles/.shell_prompt.sh
+_initcache starship init zsh
 
-#Load up all modules
-. ~/dotfiles/modules/z/z.sh
+#directory jumping (z command, provided by zoxide)
+_initcache zoxide init zsh --cmd z
 
-eval $(thefuck --alias fuck)
+#runtime versions: node + python (replaces nvm; uv handles venvs/tools)
+_initcache mise activate zsh
+
+#fix the previous command (fuck alias, provided by pay-respects)
+_initcache pay-respects zsh --alias fuck
+
+#history: keep 100k commands (macOS default caps at 1k), shared and deduped
+HISTSIZE=110000
+SAVEHIST=100000
+setopt EXTENDED_HISTORY SHARE_HISTORY HIST_IGNORE_ALL_DUPS HIST_IGNORE_SPACE HIST_REDUCE_BLANKS
+
+#fzf keybindings: Ctrl-R fuzzy history, Ctrl-T fuzzy files, Alt-C fuzzy cd
+_initcache fzf --zsh
+
+#snippet cheatsheets on Ctrl-G (cheats live in ~/dotfiles/cheats)
+_initcache navi widget zsh
+
+#zsh niceties, in required order: completions through fzf (needs compinit),
+#fish-style abbreviations, inline history suggestions, then syntax
+#highlighting which must always be sourced last
+BREW_SHARE="${HOMEBREW_PREFIX:-/opt/homebrew}/share"
+# compinit with a day cache: full audit at most once per 24h, -C (trust the
+# dump) otherwise — the audit costs ~50ms on every shell
+if [[ -z ${_comps+x} ]]; then
+	autoload -Uz compinit
+	zmodload -F zsh/stat b:zstat
+	_zcd=${ZDOTDIR:-$HOME}/.zcompdump
+	if [[ -f $_zcd ]] && (( $(date +%s) - $(zstat +mtime -- "$_zcd") < 86400 )); then
+		compinit -C
+	else
+		compinit && touch "$_zcd"
+	fi
+	unset _zcd
+fi
+[ -f "$BREW_SHARE/fzf-tab/fzf-tab.zsh" ] && source "$BREW_SHARE/fzf-tab/fzf-tab.zsh"
+if [ -f "$BREW_SHARE/zsh-abbr/zsh-abbr.zsh" ]; then
+	export ABBR_USER_ABBREVIATIONS_FILE=~/dotfiles/.config/zsh-abbr/user-abbreviations
+	source "$BREW_SHARE/zsh-abbr/zsh-abbr.zsh"
+fi
+[ -f "$BREW_SHARE/zsh-autosuggestions/zsh-autosuggestions.zsh" ] && source "$BREW_SHARE/zsh-autosuggestions/zsh-autosuggestions.zsh"
+[ -f "$BREW_SHARE/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ] && source "$BREW_SHARE/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+unset BREW_SHARE

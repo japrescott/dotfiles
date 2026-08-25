@@ -1,0 +1,40 @@
+# Prompt support code. The prompt itself is starship (.config/starship.toml);
+# this file provides what starship can't do on its own.
+
+# Per-machine badge for the prompt's leading pill (replaces the generic OS
+# logo). Rendered by starship's env_var.PROMPT_MACHINE module. Unknown hosts
+# (e.g. a new corporate machine) fall back to a generic glyph + hostname —
+# add a case for them here once they have a name.
+case "${(L)HOST%%.*}" in
+	mac|jeremys-macbook-air) PROMPT_MACHINE="󰋜 󰇵" ;;  # private laptop: home + smile
+	minix)                   PROMPT_MACHINE="󰋜 󰕈" ;;  # home ubuntu box
+	*)                       PROMPT_MACHINE=" 󰚩" ;;  # corporate: office + robot
+esac
+export PROMPT_MACHINE
+
+# Track the previous command's duration with zero-padded ms ("1s034ms"),
+# rendered by starship's env_var.PROMPT_DURATION module (its own cmd_duration
+# can't pad). Hidden under 100ms; minutes drop the ms ("2m05s").
+zmodload zsh/datetime
+_dur_preexec() { _dur_start=$EPOCHREALTIME; }
+_dur_precmd() {
+	if [[ -n ${_dur_start:-} ]]; then
+		local ms=$(( int((EPOCHREALTIME - _dur_start) * 1000) ))
+		unset _dur_start
+		if (( ms >= 60000 )); then
+			printf -v PROMPT_DURATION '%dm%02ds' $(( ms / 60000 )) $(( ms % 60000 / 1000 ))
+		elif (( ms >= 1000 )); then
+			printf -v PROMPT_DURATION '%ds%03dms' $(( ms / 1000 )) $(( ms % 1000 ))
+		elif (( ms >= 100 )); then
+			printf -v PROMPT_DURATION '%dms' $ms
+		else
+			unset PROMPT_DURATION; return
+		fi
+		export PROMPT_DURATION
+	else
+		unset PROMPT_DURATION
+	fi
+}
+autoload -Uz add-zsh-hook
+add-zsh-hook preexec _dur_preexec
+add-zsh-hook precmd _dur_precmd
