@@ -13,6 +13,3 @@
 [submodule "modules/tmux/tmux-sidebar"]
 	path = modules/tmux/tmux-sidebar
 	url = https://github.com/tmux-plugins/tmux-sidebar.git
-[submodule "modules/z"]
-	path = modules/z
-	url = https://github.com/rupa/z.git

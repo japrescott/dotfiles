@@ -1,0 +1,101 @@
+# Starship prompt — https://starship.rs
+# Tokyo Night preset (powerline pills, two-line prompt), recolored: the blue
+# is replaced with the promptline green (#87af5f, xterm 107) of the old
+# .shell_prompt.sh, and the segment ramp is green-tinted to match.
+# Requires a Nerd-Font-capable terminal (cmux/ghostty embedded font is fine).
+
+"$schema" = 'https://starship.rs/config-schema.json'
+
+add_newline = false
+
+format = """
+[░▒▓](#b4c78e)\
+${env_var.PROMPT_MACHINE}\
+[](bg:#87af5f fg:#b4c78e)\
+$directory\
+[](fg:#87af5f bg:#3a422e)\
+$git_branch\
+$git_status\
+[](fg:#3a422e bg:#262c1e)\
+$nodejs\
+$python\
+$docker_context\
+$gcloud\
+[ ](fg:#262c1e)\
+\n$character"""
+
+# previous command's duration and the clock stay at the right margin;
+# duration comes from the zsh hook in ~/dotfiles/source/prompt
+# (PROMPT_DURATION), which zero-pads ms so "1s034ms" and "1s340ms" line up
+right_format = "${env_var.PROMPT_DURATION}$time"
+
+# language/file detection scan budget per prompt; the 30ms default times out
+# (with a warning) in big working trees like zipper's
+scan_timeout = 120
+
+# statusline inside Claude Code: model, dir, git, context gauge, session cost
+# (used by "starship statusline claude-code", see ~/.claude/settings.json)
+[profiles]
+claude-code = "$claude_model$directory$git_branch$git_status$claude_context$claude_cost"
+
+# per-machine badge, set by the hostname case in ~/dotfiles/source/prompt
+[env_var.PROMPT_MACHINE]
+format = "[ $env_value ](bg:#b4c78e fg:#1d2412)"
+
+[directory]
+# Last two folders in full; everything above as 3-char fish-style crumbs,
+# e.g. ~/Pro/zip/scripts/ingest
+style = "fg:#1d2412 bg:#87af5f"
+format = "[ $path ]($style)"
+truncation_length = 2
+fish_style_pwd_dir_length = 3
+truncate_to_repo = false
+
+[git_branch]
+symbol = ""
+style = "bg:#3a422e"
+format = '[[ $symbol $branch ](fg:#87af5f bg:#3a422e)]($style)'
+
+# spell out the working-tree state with counts, e.g. +1!3?2⇡1
+[git_status]
+style = "bg:#3a422e"
+format = '[[($all_status$ahead_behind )](fg:#87af5f bg:#3a422e)]($style)'
+staged = "+$count"
+modified = "!$count"
+untracked = "?$count"
+deleted = "✘$count"
+stashed = ""
+ahead = "⇡$count"
+behind = "⇣$count"
+diverged = "⇕⇡$ahead_count⇣$behind_count"
+
+[nodejs]
+symbol = ""
+style = "bg:#262c1e"
+format = '[[ $symbol ($version) ](fg:#87af5f bg:#262c1e)]($style)'
+
+[python]
+symbol = ""
+style = "bg:#262c1e"
+format = '[[ $symbol ($version) ](fg:#87af5f bg:#262c1e)]($style)'
+
+# docker context, when the dir has a Dockerfile/compose and context isn't default
+[docker_context]
+symbol = ""
+style = "bg:#262c1e"
+format = '[[ $symbol $context ](fg:#87af5f bg:#262c1e)]($style)'
+
+# active GCP project (more useful and less leaky than the account email)
+[gcloud]
+symbol = "☁️ "
+style = "bg:#262c1e"
+format = '[[ $symbol$project ](fg:#87af5f bg:#262c1e)]($style)'
+
+# how long the previous command ran (computed in import, see right_format)
+[env_var.PROMPT_DURATION]
+format = '[󰔟 $env_value](fg:#a9bd85) '
+
+[time]
+disabled = false
+time_format = "%H:%M:%S"
+format = '[$time](dimmed)'

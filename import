@@ -77,13 +77,14 @@ setopt EXTENDED_HISTORY SHARE_HISTORY HIST_IGNORE_ALL_DUPS HIST_IGNORE_SPACE HIS
 # fzf keybindings: Ctrl-R fuzzy history, Ctrl-T fuzzy files, Alt-C fuzzy cd
 _initcache fzf --zsh
 
-# snippet cheatsheets on Ctrl-G
+# snippet cheatsheets on Ctrl-G (cheats live in ~/dotfiles/cheats)
 _initcache navi widget zsh
 
 # zsh niceties, in required order: completions through fzf (needs compinit),
 # fish-style abbreviations, inline history suggestions, then syntax
 # highlighting which must always be sourced last
 BREW_SHARE="${HOMEBREW_PREFIX:-/opt/homebrew}/share"
+# compinit with a day cache: full audit at most once per 24h, -C otherwise
 if [[ -z ${_comps+x} ]]; then
   autoload -Uz compinit
   zmodload -F zsh/stat b:zstat

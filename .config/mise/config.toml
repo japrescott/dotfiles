@@ -1,0 +1,13 @@
+# mise — runtime version manager (replaces nvm) — https://mise.jdx.dev
+# node: pinned to 22 to match the last nvm-managed version; bump deliberately.
+# python: interpreter provided by mise; uv stays in charge of tools and venvs.
+
+[tools]
+node = "22"
+python = "3.12"
+
+[settings]
+# read .nvmrc / .node-version files like nvm did
+idiomatic_version_file_enable_tools = ["node"]
+# auto-activate uv-managed .venv when entering a project directory
+python.uv_venv_auto = true

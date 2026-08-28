@@ -1,0 +1,8 @@
+abbr add "gs"="git status"
+abbr add "gd"="git diff"
+abbr add "ga"="git add"
+abbr add "gco"="git checkout"
+abbr add "gcm"="git commit -m"
+abbr add "gp"="git push"
+abbr add "gl"="git pull"
+abbr add "glog"="git log --oneline -10"

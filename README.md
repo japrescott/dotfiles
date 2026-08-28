@@ -1,78 +1,42 @@
 dotfiles
 ========
 
-Install
--------
+## Install
 
 ```sh
 git clone https://github.com/japrescott/dotfiles ~/dotfiles
 cd ~/dotfiles && ./install.sh
 ```
 
-The installer is split into explicit phases, so you can rerun one slice without
-touching the rest of the machine:
-
-```sh
-./install.sh packages
-./install.sh submodules
-./install.sh links
-./install.sh skills
-./install.sh skills-update
-./install.sh skills-projects
-./install.sh llm-import
-./install.sh llm
-./install.sh node
-./install.sh python
-```
-
-Add this to `~/.bashrc` or `~/.zshrc`:
+then add to `~/.zshrc`:
 
 ```sh
 source ~/dotfiles/import
 ```
 
-`import` resolves the repo from its own location, so sourcing works from any
-current working directory.
+`install.sh` installs everything via Homebrew (or apt on Ubuntu), symlinks the
+configs into place, and installs runtimes.
 
-LLM setup
----------
+## Managed LLM setup
 
-LLM runtime config lives under `llm/` and is managed separately from the rest of
-the shell dotfiles.
+LLM configuration is managed separately from the shell files:
 
 ```sh
-./install.sh submodules
 ./install.sh skills
 ./install.sh llm-import
 ./install.sh llm
 ```
 
-- Run `skills` to install the SHA-pinned skill packages in `manifests/skills.lock`.
-- Run `skills-update` to view newer upstream commits. Review the reported
-  revisions, then rerun it with `SKILLS_UPDATE_WRITE=1` to update the lockfile.
-- Run `skills-projects` only for private, project-specific packages declared in
-  `manifests/skills-projects.lock`. Each entry names its local project path and
-  writes that project's native `skills-lock.json`.
-- Run `llm-import` before `llm` when local Claude, OpenCode, Copilot, or
-  Conductor config should become the repo-owned source of truth.
-- The installer never overwrites existing runtime paths by default. It warns and
-  leaves them in place until you reconcile or import them.
-- Use `DOTFILES_OVERWRITE=1 ./install.sh llm` only when you intentionally want
-  to back up and replace an existing file or directory.
+- `skills` links the SHA-pinned public and private authored skill repositories.
+  Normal installation is additive: it adds missing links and leaves conflicting
+  local skill directories untouched.
+- `llm-import` imports existing Claude, OpenCode, Copilot, or Conductor config
+  into this repo before linking it. Existing runtime paths are never replaced
+  unless `DOTFILES_OVERWRITE=1` is explicitly set.
+- `llm` links the managed runtime configuration into the appropriate user paths.
 
-Skills declared in `manifests/skills.lock` are cloned as editable working trees
-under `~/Programming/skills` and `~/Programming/skills-private`. The installer
-verifies each pinned commit and links every authored skill into
-`~/.agents/skills`; existing Claude skill links resolve through that directory.
-Editing or creating a skill through `~/.claude/skills` therefore changes the
-appropriate Git working tree directly. Normal installation is additive: it adds
-missing authored-skill links but leaves any existing nonmatching local skill
-directory untouched for manual reconciliation.
-
-Authored skill workflow
------------------------
-
-Existing authored skills follow this link chain:
+Authored skills live in editable Git working trees under `~/Programming/skills`
+and `~/Programming/skills-private`. Existing skill links follow:
 
 ```text
 ~/.claude/skills/<skill>
@@ -81,80 +45,132 @@ Existing authored skills follow this link chain:
   -> ~/Programming/skills-private/<skill>  # private
 ```
 
-Editing an existing linked skill through `~/.claude/skills/<skill>` immediately
-changes its public or private Git working tree. Commit and push from that source
-repository to publish the change.
+Edits through an existing Claude skill link modify its source repository
+directly. Create new skills in the intended public or private source repository,
+then run `./install.sh skills` to add their links.
 
-A new skill cannot be automatically classified as public or private. Create it
-in the intended source repository, then refresh the links:
+Review available skill updates with `./install.sh skills-update`. After reviewing
+the revisions, set `SKILLS_UPDATE_WRITE=1` to update the lockfile.
 
-```sh
-mkdir ~/Programming/skills/my-public-skill
-# or: mkdir ~/Programming/skills-private/my-private-skill
-./install.sh skills
-```
+## Getting started — the 2026 toolchain
 
-Project-specific packages are private by default and belong in
-`manifests/skills-projects.lock`, sourced from `skills-private`. This installer
-does not replace either `~/.claude/skills` or `~/.config/opencode/skills`.
+A tour of what's wired in and the keystrokes that matter.
 
-Getting started
----------------
+### Terminal
 
-What the shell wires in by default.
+- **Theme**: [Duckbones](https://terminalcolors.com/themes/zenbones/duckbones/)
+  via `.config/ghostty/config`, which both standalone Ghostty and
+  [cmux](https://cmux.com) read (it's first in cmux's config search order).
+  Edit, then reload with **⌘⇧,** — applies instantly.
+- **Multiplexing**: cmux is the window manager locally; tmux (`.tmux.conf`)
+  remains for detachable sessions over SSH.
 
-Terminal
---------
+### Prompt (starship)
 
-- Theme: Duckbones via `.config/ghostty/config`.
-- Multiplexing: cmux locally, tmux for detachable SSH sessions.
+Green [Tokyo Night](https://starship.rs/presets/tokyo-night)-style pills —
+recolored to the `#87af5f` green of the 2015 promptline this repo ran for a
+decade. Configured in `.config/starship.toml`; support code that starship
+can't do itself lives in `source/prompt`.
 
-Prompt
-------
+- **Machine badge** (first pill): `󰋜 󰇵` on the private laptop, `󰋜 󰕈` on
+  minix, ` 󰚩` anywhere else (corporate). Hostname-based, in `source/prompt`.
+- **Directory**: last two folders in full, 3-char fish-style crumbs above
+  (`~/Pro/zip/scripts/ingest`).
+- **Git**: branch plus change counts — `+1!3?2⇡1` is staged/modified/
+  untracked/ahead.
+- **Contextual pills**: node/python versions, docker context, active gcloud
+  project — each only when relevant.
+- **Right margin**: previous command's duration (zero-padded, `1s034ms`,
+  hidden under 100ms) and the clock — the gap between two clocks is the wall
+  time between commands.
+- **Claude Code**: the same starship renders Claude Code's statusline
+  (model, context gauge, session cost) via the `claude-code` profile.
+- **Nostalgia**: the 2015 promptline is preserved in `prompt_nostalgia.sh` —
+  `zsh -f` then `source ~/dotfiles/prompt_nostalgia.sh` to visit.
 
-- Starship powers the prompt and Claude Code statusline.
-- The old promptline is still preserved in `prompt_nostalgia.sh`.
+### Navigation & preview
 
-Navigation and preview
-----------------------
+- **[zoxide](https://github.com/ajeetdsouza/zoxide)** — smarter `cd`.
+  `z zipper` jumps to the directory you visit most that matches "zipper";
+  `zi` for an interactive picker. It learns as you cd around.
+- **[yazi](https://github.com/sxyazi/yazi)** — type `y`: a terminal file
+  manager with live previews — images render as real pixels (kitty graphics
+  protocol), plus PDFs, video thumbnails, syntax-highlighted code, archives,
+  JSON. Quitting cd's your shell to wherever you navigated, so it doubles as
+  visual `cd`.
+- **[eza](https://github.com/eza-community/eza)** — `ls` and friends (`l`,
+  `ll`, `la`) with git status and icons. `tree` draws the directory tree:
+  `tree -L 2` limits depth, `-a` includes dotfiles, `--git-ignore` skips
+  node_modules and friends — `tree -L 3 --git-ignore` is the code-repo
+  incantation.
+- **`viu img.png`** shows an image in the terminal; **`lsix`** shows a
+  thumbnail sheet of a directory's images; **`bat file`** is `cat` with
+  syntax highlighting and git gutters.
 
-- `z` via zoxide for directory jumping.
-- `y` via yazi for a terminal file manager with previews.
-- `l`, `ll`, `la`, `tree`, `bat`, `viu`, and `lsix` for richer shell browsing.
+### Finding things (fzf everywhere)
 
-Finding things
---------------
+- **Ctrl-R** — fuzzy-search shell history (100k entries kept, shared across panes).
+- **Ctrl-T** — fuzzy-pick files/dirs under the cwd, inserted at the cursor,
+  with a preview pane: [bat](https://github.com/sharkdp/bat)-highlighted file
+  contents, eza tree for directories (configured in `source/fzf`).
+- **Alt-C** — fuzzy-cd into any subdirectory, previewing its tree.
+- **Tab** — completion goes through [fzf-tab](https://github.com/Aloxaf/fzf-tab):
+  type `git checkout <Tab>` and fuzzy-search the branches.
+- **fd / rg** (ripgrep) — find files by name / by contents; also the engines
+  behind the pickers.
 
-- `Ctrl-R` for fuzzy shell history.
-- `Ctrl-T` for fuzzy file picking with previews.
-- `Alt-C` for fuzzy directory jumping.
-- `fd` and `rg` as the underlying file and content search tools.
+### Typing less
 
-Typing less
------------
+- **[zsh-abbr](https://zsh-abbr.olets.dev)** — fish-style abbreviations. Type
+  `gs` + space and watch it expand to `git status` before your eyes. Unlike
+  aliases you always see the real command. Add your own with
+  `abbr add "x"="long command"` (persisted in `.config/zsh-abbr/user-abbreviations`).
+- **zsh-autosuggestions** — ghost-text suggestion from history as you type;
+  accept with →.
+- **zsh-syntax-highlighting** — valid commands render green, typos red, as you type.
 
-- `zsh-abbr` for expanding short commands to their real form.
-- `zsh-autosuggestions` for ghost-text history suggestions.
-- `zsh-syntax-highlighting` for inline command validation.
+### Remembering commands
 
-Remembering commands
---------------------
+- **[navi](https://github.com/denisidoro/navi)** — **Ctrl-G** opens a fuzzy
+  cheatsheet of your own snippets, with fill-in placeholders. Snippets live in
+  `cheats/*.cheat` in this repo — add the one-liners you keep re-googling.
+- **[tealdeer](https://github.com/tealdeer-rs/tealdeer)** — `tldr <cmd>` shows
+  community usage examples instead of a 40-page man page.
+- **[pay-respects](https://github.com/iffse/pay-respects)** — typo'd or failed a
+  command? Type `fuck` and it proposes the fix.
 
-- `Ctrl-G` opens navi snippets.
-- `tldr <cmd>` shows short usage examples.
-- `fuck` proposes a correction for failed commands via pay-respects.
+### Runtimes & git
 
-Runtimes and git
-----------------
+- **[mise](https://mise.jdx.dev)** — node + python versions, pinned in
+  `.config/mise/config.toml`. Reads `.nvmrc` in projects. `mise use node@24`
+  to switch. uv stays in charge of python venvs and tools.
+- **[delta](https://github.com/dandavison/delta)** — git diffs/log/blame with
+  syntax highlighting and line numbers. `git add -p` is highlighted too.
 
-- `mise` manages node and python versions.
-- `delta` renders git diffs, logs, and blame with syntax highlighting.
-- `source/*` is auto-sourced by `import`, so helpers like `claudeyolo` from
-  `source/claude` are available in every shell.
+### Modern coreutils
 
-Startup model
--------------
+| instead of | try | for |
+|---|---|---|
+| `du -sh *` | `dust` | disk usage as a readable tree |
+| `df -h` | `duf` | mounted volumes, readable |
+| `sed -i` | `sd 'find' 'replace'` | sane find & replace |
+| `ps aux \| grep` | `procs <name>` | readable process list |
+| `time` loops | `hyperfine 'cmd'` | proper benchmarking with stats |
 
-- `import` is orchestration only; topic-specific shell code lives in `source/*`.
-- Tool init scripts are cached under `~/.cache/zsh-init-cache/` for fast shells.
-- Completions are audited once per day and reused otherwise.
+Old habits still work — these are additions, not replacements.
+
+### Under the hood (startup speed)
+
+Startup is ~0.4s, profiled with zprof + hyperfine. How it stays that way:
+
+- `import` caches every tool's `init zsh` output in `~/.cache/zsh-init-cache/`
+  (`_initcache`), re-generating only when the tool's binary is newer — a
+  `source` costs ~1ms where a spawn costs 30–90ms.
+- compinit runs its full audit at most once a day, `-C` otherwise.
+- gcloud's completion (~250ms) loads after the first prompt, not before it.
+- The remaining cost is mise's activation hook (~140ms) and zsh-abbr (~120ms)
+  — the price of per-directory runtimes and abbreviations.
+
+Layout: `import` is orchestration only; per-topic shell code lives in
+`source/*` (auto-sourced); tool configs live in `.config/*` (symlinked by
+`install.sh`).

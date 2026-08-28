@@ -1,0 +1,32 @@
+% git
+
+# Undo the last commit but keep its changes staged
+git reset --soft HEAD~1
+
+# Show what changed in one file over the last n commits
+git log -p -<n> -- <file>
+
+# Fixup a commit and autosquash it away
+git commit --fixup <commit> && git rebase --interactive --autosquash <commit>~1
+
+% shell
+
+# Biggest directories under here (dust)
+dust -d 2
+
+# Benchmark two commands against each other (hyperfine)
+hyperfine '<command_a>' '<command_b>'
+
+# Find and replace across a repo (sd + ripgrep)
+sd '<find>' '<replace>' $(rg -l '<find>')
+
+# Disk usage of mounted volumes, readable (duf)
+duf
+
+% aws, ec2
+
+# Start the main EC2 instance
+aws ec2 start-instances --instance-ids $AWS_INSTANCE_ID
+
+# List EC2 instances with names and state
+aws ec2 describe-instances --output text --query 'Reservations[*].Instances[*].[InstanceId, InstanceType, State.Name, Tags[?Key==`Name`].Value | [0]]'

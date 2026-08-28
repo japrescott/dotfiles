@@ -1,0 +1,11 @@
+# Shared terminal config — read by both cmux and standalone Ghostty.
+# cmux checks this path FIRST and stops at the first file it finds,
+# so this wins over the empty stub in ~/Library/Application Support/com.mitchellh.ghostty/.
+# Reload inside cmux with Cmd+Shift+, (cmux -> Reload Configuration).
+
+# Duckbones (zenbones family): near-monochrome ink with duck-bill orange
+# and pond-water blue accents; stays dark regardless of macOS appearance.
+theme = Duckbones
+
+# Never let text render invisibly against the background.
+minimum-contrast = 1.3
