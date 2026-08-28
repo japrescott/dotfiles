@@ -1,0 +1,3 @@
+# Private project-specific skills only. Each entry installs at project scope and
+# creates that project's native skills-lock.json. Do not add public repositories.
+# project_path|package|commit|agents|skills

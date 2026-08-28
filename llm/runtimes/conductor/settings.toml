@@ -1,0 +1,12 @@
+"$schema" = "https://conductor.build/schemas/settings.schema.json"
+enterprise_data_privacy = false
+
+[git]
+archive_on_merge = false
+branch_prefix = "japrescott/"
+branch_prefix_type = "custom"
+
+[models]
+default = "opus-5-1m"
+default_plan_mode = true
+review = "gpt-5.6-sol"

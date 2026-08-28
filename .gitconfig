@@ -1,15 +1,15 @@
-[user]
-	name = Jeremy A. Prescott
-	email = jap@prescore.ch
+# [user]
+# 	name = Jeremy A. Prescott
+# 	email = jap@prescore.ch
 
 # [user]
 # 	name = Jeremy A. Prescott
 # 	email = jeremy@lightly.ai
 
 
-# [user]
-# 	name = Jeremy A. Prescott
-# 	email = jeremy@roboflow.com
+[user]
+	name = Jeremy A. Prescott
+	email = jeremy.prescott@roboflow.com
 
 
 [color]
@@ -73,6 +73,8 @@
 	excludesfile = /Users/jeremy/.gitignore
 	ignorecase = false
 	pager = diff-so-fancy | less --tabs=4 -RFX --pattern '^(Date|added|deleted|modified): '
+	fsync = committed,reference
+	fsyncMethod = fsync
 
 [credential]
 	helper = cache --timeout=7200
@@ -100,3 +102,4 @@
 	required = true
 [pull]
 	rebase = false
+	ff = only

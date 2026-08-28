@@ -1,0 +1,4 @@
+llm/runtimes/opencode/opencode.json|.config/opencode/opencode.json
+llm/runtimes/opencode/instructions|.config/opencode/instructions
+llm/runtimes/opencode/agents|.config/opencode/agents
+llm/runtimes/opencode/commands|.config/opencode/commands

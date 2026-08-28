@@ -1,0 +1,5 @@
+.inputrc|.inputrc
+.gitconfig|.gitconfig
+.tmux.conf|.tmux.conf
+.tmux_theme|.tmux_theme
+modules/tmux|.tmux

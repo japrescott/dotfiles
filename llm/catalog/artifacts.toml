@@ -1,0 +1,17 @@
+version = 1
+
+[runtimes.claude]
+install_mode = "symlink"
+manifest = "manifests/llm-claude-links.txt"
+
+[runtimes.copilot]
+install_mode = "symlink"
+manifest = "manifests/llm-copilot-links.txt"
+
+[runtimes.opencode]
+install_mode = "symlink"
+manifest = "manifests/llm-opencode-links.txt"
+
+[runtimes.conductor]
+install_mode = "symlink"
+manifest = "manifests/llm-conductor-links.txt"
