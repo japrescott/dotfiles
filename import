@@ -1,3 +1,17 @@
+# Ensure startup does not depend on a terminal emulator inheriting a complete
+# PATH. This must run before using dirname, find, date, or other external tools.
+for DOTFILES_SYSTEM_PATH in /opt/homebrew/bin /usr/local/bin /usr/bin /bin /usr/sbin /sbin; do
+  case ":${PATH:-}:" in
+    *":$DOTFILES_SYSTEM_PATH:"*)
+      ;;
+    *)
+      PATH="${PATH:+$PATH:}$DOTFILES_SYSTEM_PATH"
+      ;;
+  esac
+done
+export PATH
+unset DOTFILES_SYSTEM_PATH
+
 # Resolve the real path to this file so the loader works no matter where the
 # shell is currently sitting when `source ~/dotfiles/import` runs.
 if [[ -n "${ZSH_VERSION:-}" ]]; then

@@ -1,5 +1,7 @@
 git
 tmux
+starship
+mise
 viu
 lsix
 yazi
