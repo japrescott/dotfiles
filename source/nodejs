@@ -2,5 +2,13 @@
 # Make Grunt print stack traces by default
 #command -v grunt > /dev/null && alias grunt="grunt --stack"
 
+# Prefer a token supplied by the environment. On macOS, otherwise load the
+# generic-password item named NPM_TOKEN without emitting Keychain errors.
+if [[ -z "${NPM_TOKEN:-}" ]] && command -v security >/dev/null 2>&1; then
+	_dotfiles_npm_token="$(security find-generic-password -s NPM_TOKEN -w 2>/dev/null)" &&
+		[[ -n "$_dotfiles_npm_token" ]] && export NPM_TOKEN="$_dotfiles_npm_token"
+	unset _dotfiles_npm_token
+fi
+
 # Faster npm for europeans
 #command -v npm > /dev/null && alias npme="npm --registry http://registry.npmjs.eu"

@@ -11,12 +11,13 @@ source "$REPO_ROOT/scripts/install/submodules.sh"
 source "$REPO_ROOT/scripts/install/links.sh"
 source "$REPO_ROOT/scripts/install/llm.sh"
 source "$REPO_ROOT/scripts/install/skills.sh"
+source "$REPO_ROOT/scripts/install/sync.sh"
 source "$REPO_ROOT/scripts/install/node.sh"
 source "$REPO_ROOT/scripts/install/python.sh"
 
 usage() {
   cat <<'EOF'
-Usage: ./install.sh [all|packages|submodules|links|skills|skills-update|skills-projects|llm|llm-import|node|python]
+Usage: ./install.sh [all|packages|submodules|links|skills|skills-update|skills-projects|sync|llm|llm-import|node|python]
 
 Commands:
   all         Run the full bootstrap flow.
@@ -26,6 +27,7 @@ Commands:
   skills      Install SHA-pinned shared skills from the lock manifest.
   skills-update Refresh shared-skill pins after reviewing upstream changes.
   skills-projects Install private project-specific skills from the lock manifest.
+  sync        Check for updates; use `sync pull` to update clean repos or `sync reinject` to restore missing skill links.
   llm         Symlink managed LLM runtime files into user config directories.
   llm-import  Import existing local LLM runtime files into the repo-owned sources.
   node        Install nvm, Node.js LTS, and npm global tools.
@@ -35,6 +37,7 @@ EOF
 
 main() {
   local command="${1:-all}"
+  shift || true
 
   detect_platform
 
@@ -65,6 +68,9 @@ main() {
       ;;
     skills-projects)
       install_project_skills
+      ;;
+    sync)
+      sync_dotfiles_and_skills "$@"
       ;;
     llm)
       install_llm_runtime_links

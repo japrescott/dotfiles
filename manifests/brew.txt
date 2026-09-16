@@ -19,3 +19,7 @@ cask|font-symbols-only-nerd-font
 chafa
 eza
 yt-dlp
+bat
+helix
+mole
+aria2

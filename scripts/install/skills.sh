@@ -141,8 +141,24 @@ link_authored_skill_entries() {
   while IFS= read -r skill_file; do
     source_dir="$(dirname "$skill_file")"
     skill_name="$(basename "$source_dir")"
+    is_requested_skill "$skill_name" "$skill_names" || continue
     link_authored_skill "$source_dir" "$HOME/.agents/skills/$skill_name"
   done < <(find "$checkout_dir" -path '*/SKILL.md' -type f | sort)
+}
+
+is_requested_skill() {
+  local skill_name="$1"
+  local skill_names="$2"
+  local requested_skill
+
+  [[ "$skill_names" == "*" ]] && return 0
+
+  IFS=',' read -r -a requested_skills <<< "$skill_names"
+  for requested_skill in "${requested_skills[@]}"; do
+    [[ "$skill_name" == "$requested_skill" ]] && return 0
+  done
+
+  return 1
 }
 
 link_authored_skill() {

@@ -2,4 +2,4 @@
 # Update with: ./install.sh skills-update, inspect the diff, then rerun with
 # SKILLS_UPDATE_WRITE=1 only after approving the new source revisions.
 https://github.com/japrescott/skills|ce17ba81bc3a88b60db22190d414ae8063e14198|global|*|*
-https://github.com/japrescott/skills-private|155691d1cc226ada9ca4482d79f52e3938ea2a47|global|*|*
+https://github.com/japrescott/skills-private|00529b2a45ab284978ac759f4802fde74d533f3e|global|*|*

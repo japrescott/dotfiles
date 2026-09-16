@@ -1,0 +1,20 @@
+[preview]
+image_filter = "lanczos3"
+image_quality = 90
+max_width = 1200
+max_height = 900
+tab_size = 2
+wrap = "yes"
+
+[opener]
+edit = [
+	{ run = '${EDITOR:-vim} "$@"', block = true, for = "unix" },
+]
+
+[open]
+rules = [
+	{ mime = "text/*", use = ["edit"] },
+	{ mime = "application/json", use = ["edit"] },
+	{ mime = "application/toml", use = ["edit"] },
+	{ mime = "application/x-yaml", use = ["edit"] },
+]
