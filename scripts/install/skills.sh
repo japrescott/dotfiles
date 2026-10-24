@@ -102,12 +102,9 @@ install_skills_from_manifest() {
 ensure_authored_skill_repo() {
   local package="$1"
   local commit="$2"
-  local repo_name
   local checkout_dir
-  local current_commit
 
-  repo_name="$(basename "$package" .git)"
-  checkout_dir="$AUTHORED_SKILLS_ROOT/$repo_name"
+  checkout_dir="$(authored_skill_repo_path "$package")"
   mkdir -p "$AUTHORED_SKILLS_ROOT"
 
   if [[ ! -d "$checkout_dir/.git" ]]; then
@@ -119,16 +116,60 @@ ensure_authored_skill_repo() {
     exit 1
   }
 
-  current_commit="$(git -C "$checkout_dir" rev-parse HEAD)"
-  [[ "$current_commit" == "$commit" ]] || {
-    echo "Authored skills repo is not at its locked revision: $checkout_dir" >&2
-    echo "  Expected: $commit" >&2
-    echo "  Current:  $current_commit" >&2
-    echo "  Run ./install.sh skills-update, review the change, then update this checkout manually." >&2
-    exit 1
-  }
+  prepare_authored_skill_repo "$checkout_dir" "$commit" || exit 1
+  advance_authored_skill_repo "$checkout_dir" "$commit"
 
   printf '%s\n' "$checkout_dir"
+}
+
+# Checks that an authored checkout can move to a locked revision without
+# changing it. A checkout ahead of the lock is a normal authoring state, so it
+# only warns; local changes or divergence must be resolved by hand.
+prepare_authored_skill_repo() {
+  local checkout_dir="$1"
+  local commit="$2"
+  local current_commit
+
+  current_commit="$(git -C "$checkout_dir" rev-parse HEAD)"
+  [[ "$current_commit" == "$commit" ]] && return 0
+
+  if ! git -C "$checkout_dir" cat-file -e "${commit}^{commit}" 2>/dev/null; then
+    git -C "$checkout_dir" fetch --quiet origin
+    git -C "$checkout_dir" cat-file -e "${commit}^{commit}" 2>/dev/null || {
+      echo "Locked authored-skill revision is unavailable: $commit" >&2
+      return 1
+    }
+  fi
+
+  if git -C "$checkout_dir" merge-base --is-ancestor "$commit" "$current_commit"; then
+    echo "Warning: authored skills repo is ahead of its locked revision: $checkout_dir" >&2
+    echo "  Push it, then run SKILLS_UPDATE_WRITE=1 ./install.sh skills-update to re-pin." >&2
+    return 0
+  fi
+
+  if ! git -C "$checkout_dir" merge-base --is-ancestor "$current_commit" "$commit"; then
+    echo "Authored skills repo has diverged from its locked revision: $checkout_dir" >&2
+    echo "  Expected: $commit" >&2
+    echo "  Current:  $current_commit" >&2
+    echo "  Reconcile the checkout, then run ./install.sh skills-update to review the pin." >&2
+    return 1
+  fi
+
+  git_worktree_is_clean "$checkout_dir" || {
+    echo "Authored skills repo has local changes: $checkout_dir" >&2
+    echo "  Commit, stash, or discard them before applying the locked revision." >&2
+    return 1
+  }
+}
+
+# Fast-forwards a checkout already validated by prepare_authored_skill_repo.
+# Output goes to stderr because callers capture stdout as the checkout path.
+advance_authored_skill_repo() {
+  local checkout_dir="$1"
+  local commit="$2"
+
+  git -C "$checkout_dir" merge-base --is-ancestor HEAD "$commit" || return 0
+  git -C "$checkout_dir" merge --ff-only --quiet "$commit" >&2
 }
 
 link_authored_skill_entries() {
@@ -266,24 +307,30 @@ preflight_skill_package() {
 
 update_skills_lock() {
   require_command git "Git is required to update skill pins."
-  update_skill_lock_manifest "$REPO_ROOT/manifests/skills.lock" 0
+  update_skill_lock_manifest "$REPO_ROOT/manifests/skills.lock" 0 1
   update_skill_lock_manifest "$REPO_ROOT/manifests/skills-projects.lock" 1
 }
 
+# Builds the refreshed manifest first. In write mode, every authored checkout
+# that must move is validated before any is fast-forwarded, and the lockfile is
+# replaced only after all of them succeed.
 update_skill_lock_manifest() {
   local manifest_path="$1"
   local package_index="$2"
+  local advance_authored_repo="${3:-0}"
   local entry
   local package
   local commit
   local latest_commit
   local updated_manifest
+  local checkout_dir
+  local pending_advances=()
+  local pending
 
   [[ -n "$(read_manifest "$manifest_path")" ]] || return 0
 
   log_section "Reviewing pins in $(basename "$manifest_path")"
   updated_manifest="$(mktemp)"
-  trap "rm -f '$updated_manifest'" RETURN
 
   while IFS= read -r entry; do
     IFS='|' read -r -a fields <<< "$entry"
@@ -295,6 +342,9 @@ update_skill_lock_manifest() {
       printf '%s\n' "$entry" >> "$updated_manifest"
       continue
     }
+    if [[ "$commit" != "$latest_commit" && "$advance_authored_repo" == "1" ]]; then
+      pending_advances+=("$package|$latest_commit")
+    fi
     fields[$((package_index + 1))]="$latest_commit"
     (IFS='|'; printf '%s\n' "${fields[*]}") >> "$updated_manifest"
     if [[ "$commit" == "$latest_commit" ]]; then
@@ -304,11 +354,27 @@ update_skill_lock_manifest() {
     fi
   done < <(read_manifest "$manifest_path")
 
-  if [[ "${SKILLS_UPDATE_WRITE:-0}" == "1" ]]; then
-    mv "$updated_manifest" "$manifest_path"
-    trap - RETURN
-    echo "Updated $manifest_path. Review and commit the pin changes before running ./install.sh skills."
-  else
+  if [[ "${SKILLS_UPDATE_WRITE:-0}" != "1" ]]; then
+    rm -f "$updated_manifest"
     echo "Set SKILLS_UPDATE_WRITE=1 to write the reviewed updates to $manifest_path."
+    return 0
   fi
+
+  for pending in "${pending_advances[@]+"${pending_advances[@]}"}"; do
+    checkout_dir="$(authored_skill_repo_path "${pending%%|*}")"
+    [[ -d "$checkout_dir/.git" ]] || continue
+    prepare_authored_skill_repo "$checkout_dir" "${pending#*|}" || {
+      rm -f "$updated_manifest"
+      echo "No authored checkouts or pins were changed." >&2
+      exit 1
+    }
+  done
+  for pending in "${pending_advances[@]+"${pending_advances[@]}"}"; do
+    checkout_dir="$(authored_skill_repo_path "${pending%%|*}")"
+    [[ -d "$checkout_dir/.git" ]] || continue
+    advance_authored_skill_repo "$checkout_dir" "${pending#*|}"
+  done
+
+  mv "$updated_manifest" "$manifest_path"
+  echo "Updated $manifest_path. Review and commit the pin changes before running ./install.sh skills."
 }

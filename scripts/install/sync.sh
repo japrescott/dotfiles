@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+SKILLS_LOCK_PATH="manifests/skills.lock"
+
 sync_dotfiles_and_skills() {
   local action="${1:-check}"
   local quiet="${2:-}"
@@ -34,13 +36,13 @@ sync_dotfiles_and_skills() {
     return 0
   fi
 
-  if [[ "$action" == "pull" ]] && ! git_worktree_is_clean "$REPO_ROOT"; then
+  if [[ "$action" == "pull" ]] && ! git_worktree_is_clean "$REPO_ROOT" "$SKILLS_LOCK_PATH"; then
     sync_notice "dotfiles has local changes; not pulling because skill pins would need updating."
     return 1
   fi
 
-  sync_git_repository "$REPO_ROOT" "dotfiles" "$action"
-  sync_authored_skill_repositories "$action"
+  sync_git_repository "$REPO_ROOT" "dotfiles" "$action" || return 1
+  sync_authored_skill_repositories "$action" || return 1
 
   if [[ "$action" == "pull" ]]; then
     update_authored_skills_lock
@@ -48,6 +50,14 @@ sync_dotfiles_and_skills() {
   else
     report_missing_authored_skill_links
   fi
+
+  report_uncommitted_skill_pins
+}
+
+report_uncommitted_skill_pins() {
+  git -C "$REPO_ROOT" diff --quiet HEAD -- "$SKILLS_LOCK_PATH" && return 0
+  sync_notice "$SKILLS_LOCK_PATH has updated skill pins. Review and commit them:"
+  sync_notice "  git -C $REPO_ROOT commit -m 'chore: update skill pins' -- $SKILLS_LOCK_PATH"
 }
 
 sync_authored_skill_repositories() {
@@ -64,7 +74,7 @@ sync_authored_skill_repositories() {
       sync_status "Installed $repository."
     fi
 
-    sync_git_repository "$repository" "$(basename "$repository") skills" "$action"
+    sync_git_repository "$repository" "$(basename "$repository") skills" "$action" || return 1
   done < <(read_manifest "$REPO_ROOT/manifests/skills.lock")
 }
 
@@ -72,7 +82,10 @@ sync_git_repository() {
   local repository="$1"
   local label="$2"
   local action="$3"
+  local ignored_path=""
   local upstream local_commit upstream_commit
+
+  [[ "$repository" == "$REPO_ROOT" ]] && ignored_path="$SKILLS_LOCK_PATH"
 
   if [[ ! -d "$repository/.git" ]]; then
     sync_notice "$label is not installed: $repository"
@@ -86,6 +99,7 @@ sync_git_repository() {
 
   if ! git -C "$repository" fetch --quiet --prune origin; then
     sync_notice "Could not check $label for updates."
+    [[ "$action" == "pull" ]] && return 1
     return 0
   fi
 
@@ -93,11 +107,13 @@ sync_git_repository() {
   [[ -n "$upstream" ]] || upstream="$(git -C "$repository" symbolic-ref --quiet --short refs/remotes/origin/HEAD 2>/dev/null || true)"
   if [[ -z "$upstream" ]] || ! git -C "$repository" rev-parse --verify --quiet "$upstream" >/dev/null; then
     sync_notice "Could not determine the tracked branch for $label."
+    [[ "$action" == "pull" ]] && return 1
     return 0
   fi
 
-  if ! git_worktree_is_clean "$repository"; then
+  if ! git_worktree_is_clean "$repository" "$ignored_path"; then
     sync_notice "$label has local changes; leaving it untouched."
+    [[ "$action" == "pull" ]] && return 1
     return 0
   fi
 
@@ -107,24 +123,37 @@ sync_git_repository() {
     sync_status "$label is up to date."
   elif git -C "$repository" merge-base --is-ancestor "$local_commit" "$upstream_commit"; then
     if [[ "$action" == "pull" ]]; then
-      git -C "$repository" merge --ff-only "$upstream"
+      git -C "$repository" merge --ff-only --quiet "$upstream" || {
+        sync_notice "Could not fast-forward $label."
+        return 1
+      }
       sync_status "Updated $label."
     else
       sync_notice "$label has an update ready. Run: dotfiles-sync pull"
     fi
   elif git -C "$repository" merge-base --is-ancestor "$upstream_commit" "$local_commit"; then
     sync_notice "$label is ahead of its remote; leaving it untouched."
+    [[ "$action" == "pull" ]] && return 1
+    return 0
   else
     sync_notice "$label has diverged from its remote; leaving it untouched."
+    [[ "$action" == "pull" ]] && return 1
+    return 0
   fi
 }
 
+# An optional second argument names one repo-relative path whose changes are
+# tolerated, such as the skill pins that `sync pull` rewrites.
 git_worktree_is_clean() {
   local repository="$1"
+  local ignored_path="${2:-}"
+  local pathspec=(.)
 
-  git -C "$repository" diff --quiet &&
-    git -C "$repository" diff --cached --quiet &&
-    [[ -z "$(git -C "$repository" ls-files --others --exclude-standard)" ]]
+  [[ -n "$ignored_path" ]] && pathspec+=(":(exclude)$ignored_path")
+
+  git -C "$repository" diff --quiet -- "${pathspec[@]}" &&
+    git -C "$repository" diff --cached --quiet -- "${pathspec[@]}" &&
+    [[ -z "$(git -C "$repository" ls-files --others --exclude-standard -- "${pathspec[@]}")" ]]
 }
 
 authored_skill_repo_path() {
@@ -133,7 +162,7 @@ authored_skill_repo_path() {
 }
 
 update_authored_skills_lock() {
-  local manifest_path="$REPO_ROOT/manifests/skills.lock"
+  local manifest_path="$REPO_ROOT/$SKILLS_LOCK_PATH"
   local temporary_manifest line package commit scope agents skill_names repository current_commit
 
   temporary_manifest="$(mktemp)"
@@ -174,6 +203,7 @@ report_missing_authored_skill_links() {
   done < <(read_manifest "$REPO_ROOT/manifests/skills.lock")
 
   [[ "$missing" == "0" ]] && sync_status "Authored skill links are up to date."
+  return 0
 }
 
 sync_status() {
