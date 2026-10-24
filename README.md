@@ -15,7 +15,11 @@ source ~/dotfiles/import
 ```
 
 `install.sh` installs everything via Homebrew (or apt on Ubuntu), symlinks the
-configs into place, and installs runtimes.
+configs into place, and installs runtimes. Node.js and uv come from
+[mise](https://mise.jdx.dev/) at the versions in `.config/mise/config.toml`.
+Ubuntu has no mise package, so
+[install mise from its signed apt repository](https://mise.jdx.dev/installing-mise.html#apt)
+before running `./install.sh` there.
 
 ## Managed LLM setup
 
@@ -51,13 +55,19 @@ then run `./install.sh skills` to add their links.
 
 Use `dotfiles-sync` (or `./install.sh sync`) to check dotfiles and authored
 skill repositories for updates. `dotfiles-sync pull` fast-forwards clean
-repositories, refreshes the shared skill pins, and adds missing links.
+repositories, refreshes the shared skill pins, and adds missing links. When the
+pins change it leaves `manifests/skills.lock` modified and prints the command to
+commit it; that uncommitted pin change does not block later checks or pulls.
 `dotfiles-sync reinject` only restores missing authored-skill links. Interactive
 shells check in the background at most every six hours and print this command
 when action is needed; they never pull automatically or change dirty trees.
 
 Review available upstream skill pins with `./install.sh skills-update`. After
 reviewing the revisions, set `SKILLS_UPDATE_WRITE=1` to update the lockfile.
+Write mode also fast-forwards the authored checkouts in `~/Programming` to the
+new pins. It checks every checkout first and changes nothing if any of them has
+local changes or has diverged. A checkout with unpushed commits ahead of its pin
+only produces a warning, during both `skills-update` and `./install.sh skills`.
 
 ## Getting started — the 2026 toolchain
 
@@ -199,7 +209,6 @@ and `python` install.
 | [tmux](https://github.com/tmux/tmux/wiki) | terminal multiplexer |
 | [Starship](https://starship.rs/config/) | shell prompt |
 | [mise](https://mise.jdx.dev/) | runtime version manager |
-| [NVM](https://github.com/nvm-sh/nvm#readme) | Node.js version manager |
 | [Node.js](https://nodejs.org/docs/latest/api/) | JavaScript runtime |
 | [npm](https://docs.npmjs.com/) | JavaScript package manager |
 | [uv](https://docs.astral.sh/uv/) | Python version, environment, and tool manager |
