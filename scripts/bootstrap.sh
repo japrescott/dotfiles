@@ -30,8 +30,8 @@ Commands:
   sync        Check for updates; use `sync pull` to update clean repos or `sync reinject` to restore missing skill links.
   llm         Symlink managed LLM runtime files into user config directories.
   llm-import  Import existing local LLM runtime files into the repo-owned sources.
-  node        Install nvm, Node.js LTS, and npm global tools.
-  python      Install uv, pinned Python versions, and uv tools.
+  node        Install Node.js via mise and npm global tools.
+  python      Install uv via mise if missing, pinned Python versions, and uv tools.
 EOF
 }
 
@@ -43,6 +43,9 @@ main() {
 
   case "$command" in
     all)
+      # Homebrew installs mise from the package manifest; Ubuntu has no package.
+      [[ "$PACKAGE_MANAGER" != "apt" ]] ||
+        require_command mise "mise is required before a full install on Ubuntu: https://mise.jdx.dev/installing-mise.html#apt"
       install_system_packages
       init_git_submodules
       install_dotfile_links

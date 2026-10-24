@@ -26,3 +26,14 @@ require_command() {
     exit 1
   fi
 }
+
+# Installs the named tools at the versions pinned in the repo's mise config and
+# puts them on PATH for the rest of this run. Interactive shells get the same
+# versions through `mise activate` in import.
+activate_mise_tools() {
+  require_command mise "mise is required. On macOS run ./install.sh packages; on Ubuntu install it from https://mise.jdx.dev/installing-mise.html#apt."
+
+  export MISE_GLOBAL_CONFIG_FILE="$REPO_ROOT/.config/mise/config.toml"
+  mise install "$@"
+  eval "$(mise env --shell bash)"
+}

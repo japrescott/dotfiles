@@ -10,13 +10,7 @@ install_python_stack() {
 
   log_section "Installing Python via uv"
 
-  if ! command -v uv >/dev/null 2>&1; then
-    curl -LsSf https://astral.sh/uv/install.sh | sh
-
-    if [[ -d "$HOME/.local/bin" ]]; then
-      export PATH="$HOME/.local/bin:$PATH"
-    fi
-  fi
+  command -v uv >/dev/null 2>&1 || activate_mise_tools uv
 
   require_command uv "uv is required after installation, but was not found on PATH."
 
