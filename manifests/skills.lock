@@ -1,5 +1,2 @@
-# package|commit|scope|agents|skills
-# Update with: ./install.sh skills-update, inspect the diff, then rerun with
-# SKILLS_UPDATE_WRITE=1 only after approving the new source revisions.
 https://github.com/japrescott/skills|ce17ba81bc3a88b60db22190d414ae8063e14198|global|*|*
-https://github.com/japrescott/skills-private|00529b2a45ab284978ac759f4802fde74d533f3e|global|*|*
+https://github.com/japrescott/skills-private|6487047012fa904e136f3946ea77779904bc8bb9|global|*|*
