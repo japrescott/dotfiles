@@ -23,3 +23,10 @@ bat
 helix
 mole
 aria2
+navi
+tealdeer
+git-delta
+fzf-tab
+olets/tap/zsh-abbr
+zsh-autosuggestions
+zsh-syntax-highlighting
