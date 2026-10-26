@@ -331,6 +331,7 @@ update_skill_lock_manifest() {
 
   log_section "Reviewing pins in $(basename "$manifest_path")"
   updated_manifest="$(mktemp)"
+  grep '^[[:space:]]*#' "$manifest_path" > "$updated_manifest" || true
 
   while IFS= read -r entry; do
     IFS='|' read -r -a fields <<< "$entry"
