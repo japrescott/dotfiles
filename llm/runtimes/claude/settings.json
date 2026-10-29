@@ -1,0 +1,26 @@
+{
+	"model": "opus",
+	"enabledPlugins": {
+		"rf-shared@rf-internal": true,
+		"rf-developer@rf-internal": true,
+		"rf-das@rf-internal": true,
+		"agent-skills@addy-agent-skills": true
+	},
+	"extraKnownMarketplaces": {
+		"rf-internal": {
+			"source": {
+				"source": "github",
+				"repo": "roboflow/ai-marketplace"
+			}
+		},
+		"addy-agent-skills": {
+			"source": {
+				"source": "github",
+				"repo": "addyosmani/agent-skills"
+			}
+		}
+	},
+	"skipDangerousModePermissionPrompt": true,
+	"theme": "dark-ansi",
+	"tui": "fullscreen"
+}

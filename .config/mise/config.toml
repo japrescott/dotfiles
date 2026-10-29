@@ -5,6 +5,8 @@
 [tools]
 node = "22"
 python = "3.12"
+# uv itself, so Ubuntu gets a checksum-verified install without curl | sh
+uv = "latest"
 
 [settings]
 # read .nvmrc / .node-version files like nvm did

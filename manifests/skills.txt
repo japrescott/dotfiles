@@ -1,0 +1,1 @@
+# Replaced by skills.lock. This file is kept as a migration marker only.

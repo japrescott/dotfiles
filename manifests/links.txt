@@ -1,0 +1,9 @@
+.inputrc|.inputrc
+.gitconfig|.gitconfig
+.tmux.conf|.tmux.conf
+.tmux_theme|.tmux_theme
+modules/tmux|.tmux
+.config/ghostty|.config/ghostty
+.config/starship.toml|.config/starship.toml
+.config/mise|.config/mise
+.config/yazi|.config/yazi

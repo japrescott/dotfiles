@@ -1,0 +1,32 @@
+# Updates are always explicit. Interactive shells only receive a delayed,
+# rate-limited report when a clean repository or skill link needs attention.
+function dotfiles-sync() {
+	"$DOTFILES_ROOT/install.sh" sync "$@"
+}
+
+_dotfiles_run_update_check() {
+	"$DOTFILES_ROOT/install.sh" sync --quiet </dev/null >/dev/tty 2>&1 &
+	[[ -n "${ZSH_VERSION:-}" ]] && disown
+}
+
+_dotfiles_schedule_update_check() {
+	local state_dir="$HOME/.cache/dotfiles"
+	local stamp_file="$state_dir/update-check-last"
+	local current_time previous_time=0
+
+	[[ -o interactive ]] || return 0
+	current_time="$(date +%s)"
+	[[ -r "$stamp_file" ]] && previous_time="$(<"$stamp_file")"
+	[[ "$previous_time" =~ ^[0-9]+$ ]] || previous_time=0
+	(( current_time - previous_time >= 21600 )) || return 0
+
+	mkdir -p "$state_dir"
+	printf '%s\n' "$current_time" > "$stamp_file"
+	if [[ -n "${ZSH_VERSION:-}" ]]; then
+		zmodload zsh/sched 2>/dev/null && sched +5 _dotfiles_run_update_check
+	else
+		_dotfiles_run_update_check
+	fi
+}
+
+_dotfiles_schedule_update_check

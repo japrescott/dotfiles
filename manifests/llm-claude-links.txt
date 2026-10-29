@@ -1,0 +1,4 @@
+llm/runtimes/claude/CLAUDE.md|.claude/CLAUDE.md
+llm/runtimes/claude/settings.json|.claude/settings.json
+llm/runtimes/claude/rules|.claude/rules
+llm/runtimes/claude/agents|.claude/agents

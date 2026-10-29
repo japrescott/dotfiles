@@ -1,15 +1,15 @@
-[user]
-	name = Jeremy A. Prescott
-	email = jap@prescore.ch
+# [user]
+# 	name = Jeremy A. Prescott
+# 	email = jap@prescore.ch
 
 # [user]
 # 	name = Jeremy A. Prescott
 # 	email = jeremy@lightly.ai
 
 
-# [user]
-# 	name = Jeremy A. Prescott
-# 	email = jeremy@roboflow.com
+[user]
+	name = Jeremy A. Prescott
+	email = jeremy.prescott@roboflow.com
 
 
 [color]
@@ -59,6 +59,8 @@
 	excludesfile = /Users/jeremy/.gitignore
 	ignorecase = false
 	pager = delta
+	fsync = committed,reference
+	fsyncMethod = fsync
 
 [interactive]
 	diffFilter = delta --color-only
@@ -94,6 +96,7 @@
 	required = true
 [pull]
 	rebase = false
+	ff = only
 [url "https://github.com/"]
 	insteadOf = ssh://git@github.com/
 	insteadOf = git@github.com:

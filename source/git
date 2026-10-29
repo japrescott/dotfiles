@@ -42,6 +42,10 @@ function gsync-dev(){
     gsync develop
 }
 
+function gsync-master(){
+    gsync master
+}
+
 
 alias gstl='git stash list'
 alias gstshow='git stash show stash^{/$*}'
